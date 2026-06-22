@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemática A · 635 · Estudo do Zero</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFAF6; --ink:#191A23; --ink-soft:#4A4C5A; --line:#E4E0D6;
+  --accent:#1F5C8B; --accent-soft:#E7F0F7; --teal:#0E7C66;
+  --amber:#B5730A; --amber-soft:#FBF1DE; --rose:#A8324A; --rose-soft:#F8E8EC;
+  --panel:#14202E; --panel-ink:#D9E2EC; --panel-line:#2A3A4D; --code:#0E1722;
+  --maxw:820px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Spectral',Georgia,serif;line-height:1.18;color:var(--ink);font-weight:600}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code,.mono{font-family:'JetBrains Mono',monospace}
+
+/* layout */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel);color:var(--panel-ink);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 18px 60px;border-right:1px solid var(--panel-line)}
+.brand{font-family:'Spectral',serif;font-weight:700;font-size:1.35rem;color:#fff;letter-spacing:.2px;line-height:1.1}
+.brand small{display:block;font-family:'Inter';font-weight:500;font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:#7E94AB;margin-top:7px}
+.navgroup{margin-top:26px}
+.navgroup .gh{font-family:'Inter';font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#6C84A0;padding:0 10px;margin-bottom:8px}
+.navlink{display:flex;gap:11px;align-items:baseline;padding:8px 10px;border-radius:8px;cursor:pointer;
+  color:var(--panel-ink);font-size:.92rem;line-height:1.3;transition:background .12s,color .12s}
+.navlink:hover{background:#1D2C3E}
+.navlink .nidx{font-family:'JetBrains Mono';font-size:.78rem;color:#5E768F;flex:0 0 22px}
+.navlink.active{background:var(--accent);color:#fff}
+.navlink.active .nidx{color:#BFD8EC}
+
+.main{flex:1;min-width:0;display:flex;justify-content:center;padding:0 40px}
+.wrap{width:100%;max-width:var(--maxw);padding:54px 0 120px}
+
+section.theme{display:none;animation:fade .25s ease}
+section.theme.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.eyebrow{font-family:'JetBrains Mono';font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
+h1.ttl{font-size:2.5rem;font-weight:700;margin:.35rem 0 .2rem;letter-spacing:-.01em}
+.lede{font-size:1.12rem;color:var(--ink-soft);margin:0 0 6px;max-width:62ch}
+
+h2.block{font-size:1.5rem;margin:46px 0 4px;padding-top:18px;position:relative;display:flex;align-items:center;gap:12px}
+h2.block .bn{font-family:'JetBrains Mono';font-size:.8rem;font-weight:500;color:#fff;background:var(--ink);
+  width:27px;height:27px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+h2.block.t-build .bn{background:var(--accent)}
+h2.block.t-viz .bn{background:var(--teal)}
+h2.block.t-err .bn{background:var(--rose)}
+h2.block.t-form .bn{background:var(--amber)}
+h2.block.t-ex .bn{background:var(--ink)}
+h3{font-size:1.15rem;margin:26px 0 6px}
+p{margin:11px 0}
+
+.prereq{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:.85rem;color:var(--ink-soft)}
+.chip b{color:var(--accent);font-weight:600}
+
+.note{border-left:3px solid var(--accent);background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+.note.intu{border-left-color:var(--teal);background:#F3FAF8}
+.note.warn{border-left-color:var(--amber);background:var(--amber-soft)}
+.note.flag{border-left-color:var(--rose);background:var(--rose-soft)}
+.note .nt{font-weight:700;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:3px;font-family:'Inter'}
+
+.ex-solved{background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 20px 14px;margin:16px 0}
+.ex-solved .tag{display:inline-block;font-family:'JetBrains Mono';font-size:.72rem;color:var(--teal);
+  font-weight:500;letter-spacing:.06em;margin:14px 0 0;text-transform:uppercase}
+
+.formulario{background:var(--code);color:#E8EEF4;border-radius:14px;padding:8px 24px 22px;margin:18px 0}
+.formulario h4{color:#fff;font-family:'Spectral';font-size:1.05rem;margin:18px 0 4px}
+.formulario .katex{color:#F4F8FB}
+.formulario .frow{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:7px 0;border-bottom:1px dashed #25313F}
+.formulario .frow:last-child{border-bottom:none}
+.formulario .fl{color:#94A8BC;font-size:.86rem}
+
+.erros li{margin:9px 0}
+.erros b{color:var(--rose)}
+
+/* exercises */
+.exset{margin-top:8px}
+.exq{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+.exq .lvl{font-family:'JetBrains Mono';font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:6px;display:inline-block;margin-bottom:9px}
+.lvl.l1{background:#E9F5EF;color:#0E7C66}
+.lvl.l2{background:var(--accent-soft);color:var(--accent)}
+.lvl.l3{background:var(--amber-soft);color:var(--amber)}
+.lvl.l4{background:var(--rose-soft);color:var(--rose)}
+.exq .qtxt{font-size:1rem}
+.solve-btn{margin-top:12px;background:var(--ink);color:#fff;border:none;border-radius:8px;padding:8px 16px;
+  font-family:'Inter';font-size:.86rem;font-weight:600;cursor:pointer}
+.solve-btn:hover{background:#000}
+.sol{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.sol.open{display:block}
+.sol .step{margin:9px 0}
+.sol .why{color:var(--ink-soft);font-size:.92rem}
+.sol .learn{margin-top:14px;background:#F3FAF8;border:1px solid #CDE8E0;border-radius:9px;padding:10px 14px;font-size:.92rem}
+.sol .learn b{color:var(--teal)}
+
+/* widgets */
+.widget{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
+.widget canvas{display:block;width:100%;max-width:560px;margin:0 auto;background:#fff;border-radius:8px;touch-action:none}
+.ctrls{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;justify-content:center}
+.ctrl{display:flex;flex-direction:column;gap:4px;min-width:150px}
+.ctrl label{font-size:.8rem;color:var(--ink-soft);font-family:'JetBrains Mono';display:flex;justify-content:space-between}
+.ctrl label b{color:var(--accent)}
+.ctrl input[type=range]{accent-color:var(--accent);width:100%}
+.ctrl input[type=number],.ctrl select{border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-family:'JetBrains Mono';font-size:.85rem}
+.wreadout{text-align:center;margin-top:12px;font-family:'JetBrains Mono';font-size:.92rem;color:var(--ink)}
+.wreadout span{color:var(--accent);font-weight:600}
+
+.revfoot{margin-top:50px;padding:14px 18px;border:1px dashed var(--line);border-radius:10px;
+  font-size:.9rem;color:var(--ink-soft);display:flex;align-items:center;gap:10px;background:#fff}
+.revfoot input{width:17px;height:17px;accent-color:var(--teal)}
+
+table.dist{border-collapse:collapse;margin:12px 0;font-family:'JetBrains Mono';font-size:.9rem}
+table.dist td,table.dist th{border:1px solid var(--line);padding:6px 14px;text-align:center}
+table.dist th{background:#F3F1EA}
+
+.kbd{font-family:'JetBrains Mono';background:#F0EEE6;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.85em}
+
+.mtop{display:none;position:sticky;top:0;z-index:30;background:var(--panel);color:#fff;padding:12px 18px;align-items:center;justify-content:space-between}
+.mtop button{background:#1D2C3E;border:none;color:#fff;border-radius:8px;padding:8px 12px;font-size:1.1rem;cursor:pointer}
+
+@media(max-width:880px){
+  .sidebar{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:transform .25s;box-shadow:0 0 40px rgba(0,0,0,.3)}
+  .sidebar.open{transform:none}
+  .mtop{display:flex}
+  .main{padding:0 20px}
+  .wrap{padding:28px 0 90px}
+  h1.ttl{font-size:2rem}
+  body{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="mtop"><strong style="font-family:Spectral">Matemática A · 635</strong><button onclick="toggleNav()">☰ Temas</button></div>
+<div class="shell">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">Matemática A<small>Exame 635 · do zero ao positivo</small></div>
+  <div class="navgroup">
+    <div class="gh">Núcleo 11.º — Fundações</div>
+    <div id="nav1"></div>
+  </div>
+  <div class="navgroup">
+    <div class="gh">Núcleo 12.º — Maior peso</div>
+    <div id="nav2"></div>
+  </div>
+  <div class="navgroup">
+    <div class="gh">Oficiais que faltavam</div>
+    <div id="nav3"></div>
+  </div>
+</nav>
+<main class="main"><div class="wrap" id="content">
+<!-- ===================== TEMA 1 ===================== -->
+<section class="theme" id="t1" data-title="Sucessões" data-group="1">
+  <div class="eyebrow">Núcleo 11.º · Tema 1</div>
+  <h1 class="ttl">Sucessões</h1>
+  <p class="lede">Definição, monotonia, limitação e progressões aritméticas e geométricas — a base de tudo o que vem a seguir nos limites.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip"><b>Conjuntos numéricos</b> ($\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R}$)</span><span class="chip"><b>Funções</b> — noção de objeto e imagem</span><span class="chip"><b>Inequações</b> simples</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Uma <b>sucessão</b> é uma lista ordenada de números, com 1.º, 2.º, 3.º... termo. Pensa numa escada: a cada degrau (a posição $n$) corresponde uma altura (o valor $u_n$). A regra que liga "o número do degrau" à "altura" é o <b>termo geral</b>.<br><br>
+  Exemplo do dia-a-dia: pões 100€ no banco e em cada ano recebes 50€ de juro fixo → $100, 150, 200, 250,\dots$ A diferença é sempre a mesma (50): isto é uma <b>progressão aritmética</b>. Se em vez disso o dinheiro <i>duplicasse</i> todos os anos ($100,200,400,800$), a <i>razão</i> seria constante (×2): <b>progressão geométrica</b>.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — O que é uma sucessão</h3>
+  <p>Uma sucessão de números reais é uma <b>função de domínio $\mathbb{N}$</b> (ou $\mathbb{N}_0$) e conjunto de chegada $\mathbb{R}$:</p>
+  $$u:\mathbb{N}\to\mathbb{R},\qquad n\mapsto u_n$$
+  <p>$u_n$ é o <b>termo de ordem $n$</b> (ou termo geral). Escrevemos a sucessão como $(u_n)$.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Seja $u_n=2n-1$. Então $u_1=2(1)-1=1$, $u_2=3$, $u_3=5$. É a sucessão dos ímpares: $1,3,5,7,\dots$ Para saber se $99$ é termo: $2n-1=99\Leftrightarrow n=50\in\mathbb{N}$ → sim, é o 50.º termo.</p></div>
+
+  <h3>3.2 — Monotonia</h3>
+  <p>Estuda-se o sinal de $u_{n+1}-u_n$:</p>
+  <div class="prereq"><span class="chip">$u_{n+1}-u_n>0\;\forall n$ → <b>crescente</b></span><span class="chip">$u_{n+1}-u_n<0\;\forall n$ → <b>decrescente</b></span><span class="chip">$=0$ → constante</span></div>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$u_n=2n-1$: $u_{n+1}-u_n=\big(2(n+1)-1\big)-(2n-1)=2n+1-2n+1=2>0$. Como é sempre positivo, $(u_n)$ é <b>monótona crescente</b>.</p></div>
+
+  <h3>3.3 — Limitação</h3>
+  <p>$(u_n)$ é <b>majorada</b> se existe $M$ com $u_n\le M\;\forall n$; <b>minorada</b> se existe $m$ com $u_n\ge m$. É <b>limitada</b> se for as duas (existe $L>0$: $|u_n|\le L$).</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$u_n=\dfrac{n}{n+1}=1-\dfrac{1}{n+1}$. Todos os termos são positivos ($\ge \tfrac12$) e menores que $1$. Logo $\tfrac12\le u_n<1$: é <b>limitada</b> (minorada por $\tfrac12$, majorada por $1$).</p></div>
+
+  <h3>3.4 — Progressão aritmética (P.A.)</h3>
+  <p>Razão $r$ constante: $u_{n+1}-u_n=r$. Termo geral e soma dos $n$ primeiros:</p>
+  $$u_n=u_1+(n-1)\,r\qquad\qquad S_n=\dfrac{u_1+u_n}{2}\cdot n$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>P.A. com $u_1=3$, $r=4$: $u_n=3+(n-1)4=4n-1$. Soma dos primeiros 10 termos: $u_{10}=39$, logo $S_{10}=\dfrac{3+39}{2}\cdot10=21\cdot10=210$.</p></div>
+
+  <h3>3.5 — Progressão geométrica (P.G.)</h3>
+  <p>Razão $r$ constante: $\dfrac{u_{n+1}}{u_n}=r$. Termo geral e soma:</p>
+  $$u_n=u_1\cdot r^{\,n-1}\qquad\qquad S_n=u_1\cdot\dfrac{1-r^{\,n}}{1-r}\;\;(r\neq1)$$
+  <p>Se $|r|<1$, a soma de <b>todos</b> os termos (série geométrica) converge: $\displaystyle S=\dfrac{u_1}{1-r}$.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>P.G. $u_1=2$, $r=\tfrac12$: $2,1,\tfrac12,\tfrac14,\dots$ Soma infinita: $S=\dfrac{2}{1-\tfrac12}=\dfrac{2}{\tfrac12}=4$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Move os controlos: vê como $u_1$ e a razão moldam uma P.A. ($u_n=u_1+(n-1)r$) ou uma P.G. ($u_n=u_1\,r^{n-1}$). Repara quando os pontos sobem, descem ou tendem para um valor.</p>
+  <div class="widget" id="w-seq">
+    <canvas id="cv-seq" width="560" height="320"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>Tipo</label><select id="seq-type"><option value="pa">Aritmética</option><option value="pg">Geométrica</option></select></div>
+      <div class="ctrl"><label>$u_1$ <b id="seq-u1l">1</b></label><input id="seq-u1" type="range" min="-5" max="5" step="0.5" value="1"></div>
+      <div class="ctrl"><label><span id="seq-rname">razão r</span> <b id="seq-rl">1</b></label><input id="seq-r" type="range" min="-2" max="2" step="0.1" value="1"></div>
+    </div>
+    <div class="wreadout" id="seq-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Confundir P.A. com P.G.</b> Na P.A. olha-se para a <i>diferença</i> ($u_{n+1}-u_n$); na P.G. para o <i>quociente</i> ($u_{n+1}/u_n$).</li>
+    <li><b>Termo geral com $n$ em vez de $n-1$.</b> É $u_1+(n-1)r$, não $u_1+nr$. Confirma sempre com $n=1$: deve dar $u_1$.</li>
+    <li><b>Dizer "crescente" só por ver dois termos.</b> Tens de provar $u_{n+1}-u_n>0$ para <i>todo</i> o $n$, não apenas testar.</li>
+    <li><b>Usar a soma infinita com $|r|\ge1$.</b> $S=\frac{u_1}{1-r}$ só vale se $|r|<1$; caso contrário a soma não converge.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <h4>Sucessões</h4>
+    <div class="frow"><span class="fl">Monotonia</span><span>$u_{n+1}-u_n>0$ (cresc.) · $<0$ (decr.)</span></div>
+    <h4>Progressão aritmética</h4>
+    <div class="frow"><span class="fl">Termo geral</span><span>$u_n=u_1+(n-1)r$</span></div>
+    <div class="frow"><span class="fl">Soma</span><span>$S_n=\frac{u_1+u_n}{2}\,n$</span></div>
+    <h4>Progressão geométrica</h4>
+    <div class="frow"><span class="fl">Termo geral</span><span>$u_n=u_1\,r^{n-1}$</span></div>
+    <div class="frow"><span class="fl">Soma de $n$ termos</span><span>$S_n=u_1\frac{1-r^n}{1-r}$</span></div>
+    <div class="frow"><span class="fl">Soma infinita ($|r|<1$)</span><span>$S=\frac{u_1}{1-r}$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Numa P.A., $u_1=5$ e $r=3$. Calcula $u_{20}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$u_{20}=u_1+(20-1)r=5+19\times3$ <span class="why">— aplicamos o termo geral com $n=20$.</span></div>
+      <div class="step">$=5+57=\mathbf{62}$.</div>
+      <div class="learn"><b>O que este exercício te ensina:</b> substituir corretamente $n-1$ (e não $n$) no termo geral da P.A.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Estuda a monotonia de $u_n=\dfrac{n+2}{n}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$u_n=1+\dfrac{2}{n}$. <span class="why">— reescrevemos para ver melhor.</span></div>
+      <div class="step">$u_{n+1}-u_n=\dfrac{2}{n+1}-\dfrac{2}{n}=2\cdot\dfrac{n-(n+1)}{n(n+1)}=\dfrac{-2}{n(n+1)}$.</div>
+      <div class="step">Como $n(n+1)>0$, a expressão é sempre <b>negativa</b> → $(u_n)$ é <b>decrescente</b>. <span class="why">— sinal constante decide a monotonia.</span></div>
+      <div class="learn"><b>O que este exercício te ensina:</b> reduzir $u_{n+1}-u_n$ a uma só fração e ler o sinal pelo denominador positivo.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">P.G. com $u_2=6$ e $u_5=48$. Determina $u_1$ e $r$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\dfrac{u_5}{u_2}=r^{5-2}=r^3=\dfrac{48}{6}=8$ <span class="why">— dividir termos elimina $u_1$.</span></div>
+      <div class="step">$r^3=8\Rightarrow r=2$. Depois $u_2=u_1 r\Rightarrow 6=u_1\cdot2\Rightarrow u_1=3$.</div>
+      <div class="learn"><b>O que este exercício te ensina:</b> o quociente de dois termos de uma P.G. dá $r$ elevado à diferença das ordens.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Mostra que $1+\tfrac13+\tfrac19+\tfrac1{27}+\cdots=\tfrac32$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">É uma série geométrica com $u_1=1$ e $r=\tfrac13$.</div>
+      <div class="step">Como $|r|=\tfrac13<1$, converge e $S=\dfrac{u_1}{1-r}=\dfrac{1}{1-\frac13}=\dfrac{1}{\frac23}=\dfrac32$. <span class="why">— condição $|r|<1$ verificada antes de aplicar.</span></div>
+      <div class="learn"><b>O que este exercício te ensina:</b> verificar $|r|<1$ <i>antes</i> de usar a soma infinita.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Uma sucessão é definida por $u_1=2$ e $u_{n+1}=u_n+2n$. Mostra que $u_n=n^2-n+2$ e indica se é monótona.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Verificação para $n=1$: $1^2-1+2=2=u_1$. ✓</div>
+      <div class="step">Admitindo $u_n=n^2-n+2$: $u_{n+1}=u_n+2n=n^2-n+2+2n=n^2+n+2$. <span class="why">— usamos a recorrência dada.</span></div>
+      <div class="step">E a fórmula em $n+1$: $(n+1)^2-(n+1)+2=n^2+2n+1-n-1+2=n^2+n+2$. ✓ Coincidem.</div>
+      <div class="step">Monotonia: $u_{n+1}-u_n=2n>0\;\forall n$ → <b>crescente</b>.</div>
+      <div class="learn"><b>O que este exercício te ensina:</b> passar de uma definição por recorrência para o termo geral e confirmar com a própria recorrência.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial? (valida o formulário com a prova-modelo do IAVE)</div>
+</section>
+<!-- ===================== TEMA 2 ===================== -->
+<section class="theme" id="t2" data-title="Limites de sucessões" data-group="1">
+  <div class="eyebrow">Núcleo 11.º · Tema 2</div>
+  <h1 class="ttl">Limites de sucessões</h1>
+  <p class="lede">Para onde tendem os termos quando $n\to+\infty$ — limites notáveis e como levantar indeterminações.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t1')"><b>Sucessões</b> e progressões</span><span class="chip">Operações com potências</span><span class="chip">Fatorização de polinómios</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  "Limite" responde à pergunta: <i>à medida que avanço infinitamente na sucessão, os termos aproximam-se de quê?</i> Em $u_n=\tfrac1n$ os termos são $1,\tfrac12,\tfrac13,\dots$ — encolhem e <b>aproximam-se de 0</b> sem nunca lá chegar. Dizemos $\lim u_n=0$. Há três destinos possíveis: tender para um número (converge), disparar para $\pm\infty$ (diverge), ou andar aos saltos sem destino (não tem limite).</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Limites elementares</h3>
+  $$\lim\frac1n=0,\qquad \lim\frac{1}{n^k}=0\;(k>0),\qquad \lim n=+\infty,\qquad \lim c=c$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\lim\dfrac{5n+3}{n}=\lim\Big(5+\dfrac3n\Big)=5+0=5$.</p></div>
+
+  <h3>3.2 — Operações com limites</h3>
+  <p>Se $\lim u_n=a$ e $\lim v_n=b$ (finitos), então o limite da soma é $a+b$, do produto $ab$, do quociente $a/b$ (se $b\neq0$). Com infinitos usamos as regras: $(+\infty)+(+\infty)=+\infty$, $\;k\cdot(+\infty)=+\infty$ se $k>0$, etc.</p>
+
+  <h3>3.3 — Indeterminações</h3>
+  <p>Há 7 símbolos que <b>não</b> têm valor automático e exigem "levantamento":</p>
+  <div class="prereq"><span class="chip">$\frac{\infty}{\infty}$</span><span class="chip">$\frac{0}{0}$</span><span class="chip">$\infty-\infty$</span><span class="chip">$0\times\infty$</span><span class="chip">$1^{\infty}$</span><span class="chip">$\infty^0$</span><span class="chip">$0^0$</span></div>
+  <div class="ex-solved"><span class="tag">Exemplo — $\tfrac{\infty}{\infty}$</span><p>$\lim\dfrac{3n^2-n}{n^2+5}$. Pomos $n^2$ em evidência: $\dfrac{n^2(3-\frac1n)}{n^2(1+\frac5{n^2})}=\dfrac{3-\frac1n}{1+\frac5{n^2}}\to\dfrac{3}{1}=3$. <b>Regra prática:</b> no quociente de polinómios em $n$, o limite é o quociente dos coeficientes dos termos de maior grau (se o grau for igual).</p></div>
+  <div class="ex-solved"><span class="tag">Exemplo — $\infty-\infty$</span><p>$\lim\big(\sqrt{n^2+n}-n\big)$. Multiplicamos pelo conjugado: $\dfrac{(\sqrt{n^2+n}-n)(\sqrt{n^2+n}+n)}{\sqrt{n^2+n}+n}=\dfrac{n}{\sqrt{n^2+n}+n}\to\dfrac{n}{2n}=\dfrac12$.</p></div>
+
+  <h3>3.4 — Limite notável (número de Neper)</h3>
+  $$\lim\Big(1+\frac1n\Big)^{n}=e\approx2{,}718\qquad\text{e, mais geral,}\qquad \lim\Big(1+\frac{a}{n}\Big)^{n}=e^{a}$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\lim\Big(1+\dfrac3n\Big)^{n}=e^{3}$. E $\lim\Big(1+\dfrac1n\Big)^{2n}=\Big[\lim\big(1+\tfrac1n\big)^n\Big]^2=e^2$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Observa os termos de $u_n=\dfrac{an+b}{cn+d}$ a aproximarem-se (ou não) da reta-limite. Ajusta os coeficientes e vê o limite estabilizar.</p>
+  <div class="widget" id="w-lim">
+    <canvas id="cv-lim" width="560" height="320"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>$a$ <b id="lim-al">2</b></label><input id="lim-a" type="range" min="-4" max="4" step="1" value="2"></div>
+      <div class="ctrl"><label>$b$ <b id="lim-bl">1</b></label><input id="lim-b" type="range" min="-6" max="6" step="1" value="1"></div>
+      <div class="ctrl"><label>$c$ <b id="lim-cl">1</b></label><input id="lim-c" type="range" min="1" max="4" step="1" value="1"></div>
+    </div>
+    <div class="wreadout" id="lim-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Escrever $\frac{\infty}{\infty}=1$ ou $\infty-\infty=0$.</b> São <i>indeterminações</i> — não têm valor sem cálculo.</li>
+    <li><b>Esquecer o expoente no limite de Neper.</b> $\big(1+\tfrac3n\big)^n\to e^3$, não $e$. O coeficiente de $\frac1n$ vai para o expoente.</li>
+    <li><b>Cortar termos mal.</b> Em $\frac{\infty}{\infty}$ põe o maior grau em evidência; não "cortes" $n$ a olho.</li>
+    <li><b>Confundir limite com termo.</b> $\lim u_n=0$ não significa que algum termo seja $0$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <h4>Limites notáveis</h4>
+    <div class="frow"><span class="fl">Inversa de potência</span><span>$\lim\frac{1}{n^k}=0\;(k>0)$</span></div>
+    <div class="frow"><span class="fl">Número de Neper</span><span>$\lim(1+\frac{a}{n})^n=e^a$</span></div>
+    <div class="frow"><span class="fl">Quociente de polinómios (grau igual)</span><span>$\to$ quociente dos coef. de maior grau</span></div>
+    <div class="frow"><span class="fl">Indeterminações</span><span>$\frac{\infty}{\infty},\frac00,\infty-\infty,0\cdot\infty,1^\infty,\infty^0,0^0$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Calcula $\lim\dfrac{4n-1}{2n}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$=\lim\Big(2-\dfrac{1}{2n}\Big)=2-0=\mathbf{2}$. <span class="why">— separar em parcelas e usar $\frac1n\to0$.</span></div>
+      <div class="learn"><b>Ensina:</b> dividir antes de tomar limite simplifica $\frac\infty\infty$.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Calcula $\lim\dfrac{2n^2+n}{5n^2-3}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Maior grau é $n^2$ em cima e em baixo. Quociente dos coeficientes: $\dfrac{2}{5}$.</div>
+      <div class="step">$=\mathbf{\dfrac25}$. <span class="why">— regra do quociente de polinómios de grau igual.</span></div>
+      <div class="learn"><b>Ensina:</b> reconhecer rapidamente o limite pelo termo dominante.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Calcula $\lim\big(\sqrt{n^2+3n}-n\big)$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Indeterminação $\infty-\infty$. Multiplica e divide pelo conjugado $\sqrt{n^2+3n}+n$:</div>
+      <div class="step">$=\lim\dfrac{n^2+3n-n^2}{\sqrt{n^2+3n}+n}=\lim\dfrac{3n}{\sqrt{n^2+3n}+n}$.</div>
+      <div class="step">Pondo $n$ em evidência no denominador: $\to\dfrac{3n}{n(\sqrt{1}+1)}=\dfrac{3}{2}$. <span class="why">— $\sqrt{n^2+3n}\approx n$ para $n$ grande.</span></div>
+      <div class="learn"><b>Ensina:</b> o conjugado é a ferramenta-padrão para $\infty-\infty$ com raízes.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Calcula $\lim\Big(\dfrac{n+2}{n}\Big)^{n}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\dfrac{n+2}{n}=1+\dfrac2n$. Logo $\Big(1+\dfrac2n\Big)^n$.</div>
+      <div class="step">Pelo limite notável $\lim(1+\tfrac a n)^n=e^a$ com $a=2$: $=\mathbf{e^{2}}$. <span class="why">— reescrever na forma $1+\frac a n$ é o passo-chave.</span></div>
+      <div class="learn"><b>Ensina:</b> sempre que aparece $(\,\cdot\,)^n$ com base $\to1$, suspeita do número de Neper.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 3 ===================== -->
+<section class="theme" id="t3" data-title="Funções (11.º) — limites e continuidade" data-group="1">
+  <div class="eyebrow">Núcleo 11.º · Tema 3</div>
+  <h1 class="ttl">Funções (11.º): limites e continuidade</h1>
+  <p class="lede">Limite de $f(x)$ quando $x\to a$, limites laterais e o que significa uma função ser contínua.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t2')"><b>Limites de sucessões</b></span><span class="chip">Domínio de funções</span><span class="chip">Fatorização / casos notáveis</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  O limite de uma função em $x=a$ é o valor a que $f(x)$ se aproxima quando $x$ se <i>aproxima</i> de $a$ — <b>sem necessariamente lá tocar</b>. Imagina caminhares ao longo do gráfico em direção a $x=a$: a altura para onde te encaminhas é o limite. Pode acontecer que aproximando-te <i>pela esquerda</i> chegues a uma altura e <i>pela direita</i> a outra — aí o limite (bilateral) não existe.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Limite num ponto e limites laterais</h3>
+  <p>$\displaystyle\lim_{x\to a^-}f(x)$ (pela esquerda) e $\displaystyle\lim_{x\to a^+}f(x)$ (pela direita). O limite existe se e só se ambos existem e são iguais:</p>
+  $$\lim_{x\to a}f(x)=L\iff \lim_{x\to a^-}f(x)=\lim_{x\to a^+}f(x)=L$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=\dfrac{|x|}{x}$. Para $x\to0^-$: $f=-1$; para $x\to0^+$: $f=+1$. Como diferem, $\lim_{x\to0}f(x)$ <b>não existe</b>.</p></div>
+
+  <h3>3.2 — Indeterminação $\frac00$ (fatorização)</h3>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\displaystyle\lim_{x\to2}\dfrac{x^2-4}{x-2}$ dá $\frac00$. Fatoriza: $\dfrac{(x-2)(x+2)}{x-2}=x+2\to4$. <b>Cortar o fator comum</b> levanta a indeterminação.</p></div>
+
+  <h3>3.3 — Continuidade</h3>
+  <p>$f$ é <b>contínua em $a$</b> se: existe $f(a)$, existe $\lim_{x\to a}f(x)$, e são iguais:</p>
+  $$\lim_{x\to a}f(x)=f(a)$$
+  <p>Intuitivamente: o gráfico desenha-se "sem levantar o lápis". Funções polinomiais, racionais (no domínio), trigonométricas, exponenciais e logarítmicas são contínuas em todo o seu domínio.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=\begin{cases}x+1,&x\le1\\ 3-x,&x>1\end{cases}$. Em $x=1$: $\lim_{x\to1^-}=2$, $\lim_{x\to1^+}=2$, e $f(1)=2$ → <b>contínua em 1</b>.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Função por ramos com um "salto" ajustável. Move o salto e vê os limites laterais separarem-se — a continuidade quebra-se exatamente quando deixam de coincidir.</p>
+  <div class="widget" id="w-cont">
+    <canvas id="cv-cont" width="560" height="320"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>Salto em $x=1$ <b id="cont-jl">0</b></label><input id="cont-j" type="range" min="-3" max="3" step="0.5" value="0"></div>
+    </div>
+    <div class="wreadout" id="cont-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Calcular $f(a)$ em vez do limite.</b> O limite ignora o valor exato em $a$; importa a vizinhança.</li>
+    <li><b>Concluir que o limite existe sem ver os dois lados.</b> Em pontos de mudança de ramo, calcula sempre os dois limites laterais.</li>
+    <li><b>Dividir por zero sem fatorizar.</b> Perante $\frac00$, tenta fatorizar ou usar conjugado antes de desistir.</li>
+    <li><b>Confundir "tem limite" com "é contínua".</b> Pode existir limite e a função nem estar definida em $a$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Limite existe</span><span>$\lim_{x\to a^-}f=\lim_{x\to a^+}f$</span></div>
+    <div class="frow"><span class="fl">Continuidade em $a$</span><span>$\lim_{x\to a}f(x)=f(a)$</span></div>
+    <div class="frow"><span class="fl">$\frac00$</span><span>fatorizar / conjugado e simplificar</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Calcula $\displaystyle\lim_{x\to3}(2x^2-x+1)$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Polinómio é contínuo → substitui: $2(9)-3+1=\mathbf{16}$. <span class="why">— em funções contínuas, limite = imagem.</span></div>
+      <div class="learn"><b>Ensina:</b> em polinómios o limite calcula-se por substituição direta.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Calcula $\displaystyle\lim_{x\to1}\dfrac{x^2-1}{x-1}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Dá $\frac00$. Fatoriza: $\dfrac{(x-1)(x+1)}{x-1}=x+1$.</div>
+      <div class="step">$\to1+1=\mathbf{2}$. <span class="why">— corta-se o fator $(x-1)$.</span></div>
+      <div class="learn"><b>Ensina:</b> $\frac00$ com polinómios pede fatorização.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Calcula $\displaystyle\lim_{x\to0}\dfrac{\sqrt{x+4}-2}{x}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Dá $\frac00$. Multiplica por conjugado $\sqrt{x+4}+2$:</div>
+      <div class="step">$\dfrac{(x+4)-4}{x(\sqrt{x+4}+2)}=\dfrac{x}{x(\sqrt{x+4}+2)}=\dfrac{1}{\sqrt{x+4}+2}$.</div>
+      <div class="step">$\to\dfrac{1}{2+2}=\mathbf{\dfrac14}$. <span class="why">— o conjugado racionaliza a raiz.</span></div>
+      <div class="learn"><b>Ensina:</b> conjugado também serve em $\frac00$ com raízes.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Determina $k$ para que $f(x)=\begin{cases}\frac{x^2-9}{x-3},&x\neq3\\ k,&x=3\end{cases}$ seja contínua em $x=3$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\lim_{x\to3}\dfrac{x^2-9}{x-3}=\lim\dfrac{(x-3)(x+3)}{x-3}=\lim(x+3)=6$.</div>
+      <div class="step">Continuidade exige $f(3)=\lim_{x\to3}f$, logo $k=\mathbf{6}$. <span class="why">— igualar imagem ao limite.</span></div>
+      <div class="learn"><b>Ensina:</b> "tornar contínua" = definir a imagem igual ao limite.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 4 ===================== -->
+<section class="theme" id="t4" data-title="Derivadas" data-group="1">
+  <div class="eyebrow">Núcleo 11.º · Tema 4</div>
+  <h1 class="ttl">Derivadas</h1>
+  <p class="lede">Definição por limite, o seu significado geométrico (declive da tangente) e as regras de derivação.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t3')"><b>Limites de funções</b></span><span class="chip">Declive de uma reta</span><span class="chip">Operações com frações</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  A derivada mede a <b>taxa de variação instantânea</b> — a rapidez com que a função muda <i>naquele ponto</i>. Geometricamente é o <b>declive da reta tangente</b> ao gráfico. Imagina um carro: a velocidade média é distância/tempo num intervalo (reta secante); a velocidade no instante exato é o limite quando o intervalo encolhe a zero (reta tangente). Esse limite é a derivada.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Definição (taxa de variação)</h3>
+  $$f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}$$
+  <p>É o limite do declive das secantes — quando existe (e é finito), $f$ diz-se <b>diferenciável em $a$</b>.</p>
+  <div class="ex-solved"><span class="tag">Exemplo (pela definição)</span><p>$f(x)=x^2$, em $a=3$: $\lim_{h\to0}\dfrac{(3+h)^2-9}{h}=\lim_{h\to0}\dfrac{6h+h^2}{h}=\lim_{h\to0}(6+h)=6$. Logo $f'(3)=6$.</p></div>
+
+  <h3>3.2 — Interpretação geométrica: reta tangente</h3>
+  <p>A reta tangente ao gráfico de $f$ no ponto $(a,f(a))$ tem declive $f'(a)$:</p>
+  $$y=f(a)+f'(a)\,(x-a)$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=x^2$ em $a=3$: $f(3)=9$, $f'(3)=6$. Tangente: $y=9+6(x-3)=6x-9$.</p></div>
+
+  <h3>3.3 — Regras de derivação</h3>
+  <div class="prereq"><span class="chip">$(x^n)'=n\,x^{n-1}$</span><span class="chip">$(c)'=0$</span><span class="chip">$(\sin x)'=\cos x$</span><span class="chip">$(\cos x)'=-\sin x$</span><span class="chip">$(e^x)'=e^x$</span><span class="chip">$(\ln x)'=\frac1x$</span></div>
+  <p>Operações:</p>
+  $$(u+v)'=u'+v'\quad (uv)'=u'v+uv'\quad \Big(\frac uv\Big)'=\frac{u'v-uv'}{v^2}\quad (u^n)'=n\,u^{n-1}u'\;\text{(cadeia)}$$
+  <div class="ex-solved"><span class="tag">Exemplo (produto)</span><p>$f(x)=x^2\sin x$: $f'=2x\sin x+x^2\cos x$.</p></div>
+  <div class="ex-solved"><span class="tag">Exemplo (cadeia)</span><p>$f(x)=(3x+1)^4$: $f'=4(3x+1)^3\cdot3=12(3x+1)^3$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>A secante (vermelha) liga dois pontos do gráfico de $f(x)=x^2$. Aproxima o segundo ponto do primeiro (reduz $h$): o declive da secante tende para a tangente (azul). Esse limite <i>é</i> a derivada.</p>
+  <div class="widget" id="w-der">
+    <canvas id="cv-der" width="560" height="320"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>ponto $a$ <b id="der-al">1</b></label><input id="der-a" type="range" min="-2.5" max="2.5" step="0.1" value="1"></div>
+      <div class="ctrl"><label>distância $h$ <b id="der-hl">1.5</b></label><input id="der-h" type="range" min="0.05" max="2" step="0.05" value="1.5"></div>
+    </div>
+    <div class="wreadout" id="der-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Esquecer a regra da cadeia.</b> $((3x+1)^4)'\neq4(3x+1)^3$ — falta o $\times3$ da derivada do interior.</li>
+    <li><b>Trocar o sinal em $(\cos x)'$.</b> É $-\sin x$.</li>
+    <li><b>Aplicar $(uv)'=u'v'$.</b> Errado — é $u'v+uv'$.</li>
+    <li><b>Confundir $f'(a)$ (número) com $f'(x)$ (função).</b> A reta tangente usa o <i>número</i> $f'(a)$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <h4>Definição e tangente</h4>
+    <div class="frow"><span class="fl">Derivada</span><span>$f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}$</span></div>
+    <div class="frow"><span class="fl">Reta tangente</span><span>$y=f(a)+f'(a)(x-a)$</span></div>
+    <h4>Regras</h4>
+    <div class="frow"><span class="fl">Potência</span><span>$(x^n)'=nx^{n-1}$</span></div>
+    <div class="frow"><span class="fl">Produto / Quociente</span><span>$(uv)'=u'v+uv'$ · $(\frac uv)'=\frac{u'v-uv'}{v^2}$</span></div>
+    <div class="frow"><span class="fl">Cadeia</span><span>$(u^n)'=nu^{n-1}u'$</span></div>
+    <div class="frow"><span class="fl">Notáveis</span><span>$(\sin)'=\cos,\;(\cos)'=-\sin,\;(e^x)'=e^x,\;(\ln x)'=\frac1x$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Deriva $f(x)=5x^3-2x+7$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'(x)=15x^2-2$. <span class="why">— regra da potência termo a termo; constante deriva a 0.</span></div>
+      <div class="learn"><b>Ensina:</b> derivar polinómios é mecânico com $(x^n)'=nx^{n-1}$.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Deriva $f(x)=\dfrac{x}{x^2+1}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Quociente: $u=x\,(u'=1)$, $v=x^2+1\,(v'=2x)$.</div>
+      <div class="step">$f'=\dfrac{1\cdot(x^2+1)-x\cdot2x}{(x^2+1)^2}=\dfrac{1-x^2}{(x^2+1)^2}$. <span class="why">— aplicar $\frac{u'v-uv'}{v^2}$.</span></div>
+      <div class="learn"><b>Ensina:</b> manter a ordem $u'v-uv'$ no numerador.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Escreve a equação da reta tangente a $f(x)=x^3$ no ponto de abcissa $2$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f(2)=8$; $f'(x)=3x^2\Rightarrow f'(2)=12$.</div>
+      <div class="step">$y=8+12(x-2)=12x-16$. <span class="why">— $y=f(a)+f'(a)(x-a)$.</span></div>
+      <div class="learn"><b>Ensina:</b> precisas de dois números — $f(a)$ e $f'(a)$.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Calcula $f'(x)$ para $f(x)=(2x-1)^3\sin x$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Produto de $u=(2x-1)^3$ e $v=\sin x$.</div>
+      <div class="step">$u'=3(2x-1)^2\cdot2=6(2x-1)^2$ (cadeia); $v'=\cos x$.</div>
+      <div class="step">$f'=6(2x-1)^2\sin x+(2x-1)^3\cos x$. <span class="why">— combinar produto + cadeia.</span></div>
+      <div class="learn"><b>Ensina:</b> identificar a estrutura (produto cujos fatores precisam da cadeia) antes de derivar.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 5 ===================== -->
+<section class="theme" id="t5" data-title="Aplicações das derivadas" data-group="1">
+  <div class="eyebrow">Núcleo 11.º · Tema 5</div>
+  <h1 class="ttl">Aplicações das derivadas</h1>
+  <p class="lede">Usar o sinal de $f'$ para estudar monotonia e extremos — e resolver problemas de otimização.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t4')"><b>Derivadas</b> e regras</span><span class="chip">Quadros de sinais</span><span class="chip">Resolver $f'(x)=0$</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Onde a função <i>sobe</i>, a tangente tem declive positivo → $f'>0$. Onde <i>desce</i>, $f'<0$. No cimo de uma colina ou fundo de um vale, a tangente é horizontal → $f'=0$. Por isso o <b>sinal de $f'$</b> conta-nos a monotonia, e os <b>zeros de $f'$</b> são candidatos a máximo/mínimo. Otimizar (a área máxima, o custo mínimo) é exatamente procurar esses pontos.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Monotonia pelo sinal da derivada</h3>
+  <div class="prereq"><span class="chip">$f'(x)>0$ num intervalo → $f$ <b>crescente</b></span><span class="chip">$f'(x)<0$ → <b>decrescente</b></span></div>
+
+  <h3>3.2 — Extremos (pontos críticos)</h3>
+  <p>Os <b>candidatos</b> a extremo são os zeros de $f'$ (e pontos onde $f'$ não existe). Classificam-se pela <b>mudança de sinal</b> de $f'$:</p>
+  <div class="prereq"><span class="chip">$+\to-$ : <b>máximo</b></span><span class="chip">$-\to+$ : <b>mínimo</b></span><span class="chip">sem mudança: não é extremo</span></div>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=x^3-3x$. $f'=3x^2-3=3(x-1)(x+1)$, zeros em $x=\pm1$. Sinal: $f'>0$ em $]-\infty,-1[$, $<0$ em $]-1,1[$, $>0$ em $]1,+\infty[$. Logo <b>máximo em $x=-1$</b> ($f(-1)=2$) e <b>mínimo em $x=1$</b> ($f(1)=-2$).</p></div>
+
+  <h3>3.3 — Otimização (método)</h3>
+  <p>1) Escreve a grandeza a otimizar em função de <b>uma</b> variável (usa a restrição). 2) Indica o domínio. 3) Deriva e iguala a zero. 4) Confirma que é máximo/mínimo pelo sinal de $f'$. 5) Responde com unidades.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Retângulo com perímetro $20$. Área máxima? Lados $x$ e $10-x$. $A(x)=x(10-x)=10x-x^2$, $x\in]0,10[$. $A'=10-2x=0\Rightarrow x=5$. $A'$ passa de $+$ a $-$ → máximo. $A(5)=25$. É um <b>quadrado $5\times5$</b>.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Gráfico de $f(x)=x^3+bx$ e da sua derivada (a tracejado). Ajusta $b$: onde a derivada cruza o eixo, $f$ tem extremos; onde $f'>0$, $f$ sobe.</p>
+  <div class="widget" id="w-mono">
+    <canvas id="cv-mono" width="560" height="320"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>$b$ em $x^3+bx$ <b id="mono-bl">-3</b></label><input id="mono-b" type="range" min="-6" max="3" step="0.5" value="-3"></div>
+    </div>
+    <div class="wreadout" id="mono-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Dizer que todo o zero de $f'$ é extremo.</b> Só é se houver <i>mudança</i> de sinal (ex.: $x^3$ tem $f'(0)=0$ mas não é extremo).</li>
+    <li><b>Esquecer o domínio na otimização.</b> Variáveis físicas (comprimentos) são positivas — define o intervalo.</li>
+    <li><b>Confundir o valor de $x$ com o valor do extremo.</b> O extremo é $f(x)$, não $x$.</li>
+    <li><b>Otimizar com duas variáveis.</b> Usa sempre a restrição para reduzir a uma só variável antes de derivar.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Crescente</span><span>$f'>0$</span></div>
+    <div class="frow"><span class="fl">Decrescente</span><span>$f'<0$</span></div>
+    <div class="frow"><span class="fl">Máximo</span><span>$f'$ passa de $+$ a $-$</span></div>
+    <div class="frow"><span class="fl">Mínimo</span><span>$f'$ passa de $-$ a $+$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Indica os intervalos de monotonia de $f(x)=x^2-4x$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'=2x-4=0\Rightarrow x=2$. $f'<0$ para $x<2$, $f'>0$ para $x>2$.</div>
+      <div class="step">Decrescente em $]-\infty,2]$, crescente em $[2,+\infty[$; mínimo em $x=2$. </div>
+      <div class="learn"><b>Ensina:</b> uma parábola tem um único ponto de viragem dado por $f'=0$.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Determina os extremos de $f(x)=x^3-12x$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'=3x^2-12=3(x-2)(x+2)$; zeros $x=\pm2$.</div>
+      <div class="step">Sinal: $+,-,+$ → máximo em $x=-2$ ($f=16$), mínimo em $x=2$ ($f=-16$). <span class="why">— quadro de sinais decide.</span></div>
+      <div class="learn"><b>Ensina:</b> classificar extremos pela mudança de sinal, não pelo valor de $f'$.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">De uma cartolina $12\times12$ cortam-se quadrados de lado $x$ nos cantos para formar uma caixa sem tampa. Qual o $x$ que maximiza o volume?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Base $(12-2x)$, altura $x$: $V(x)=x(12-2x)^2$, $x\in]0,6[$.</div>
+      <div class="step">$V'=(12-2x)^2+x\cdot2(12-2x)(-2)=(12-2x)\big[(12-2x)-4x\big]=(12-2x)(12-6x)$.</div>
+      <div class="step">Zeros: $x=6$ (fora) e $x=2$. $V'$ passa de $+$ a $-$ em $x=2$ → máximo. $V(2)=2\cdot8^2=128$.</div>
+      <div class="learn"><b>Ensina:</b> modelar volume com uma variável e respeitar o domínio físico.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">$f(x)=\dfrac{\ln x}{x}$, $x>0$. Mostra que tem um máximo e localiza-o.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'=\dfrac{\frac1x\cdot x-\ln x\cdot1}{x^2}=\dfrac{1-\ln x}{x^2}$.</div>
+      <div class="step">$f'=0\Leftrightarrow \ln x=1\Leftrightarrow x=e$. Para $x<e$, $\ln x<1\Rightarrow f'>0$; para $x>e$, $f'<0$.</div>
+      <div class="step">Mudança $+\to-$ → <b>máximo em $x=e$</b>, $f(e)=\dfrac1e$. <span class="why">— sinal de $1-\ln x$ controla tudo.</span></div>
+      <div class="learn"><b>Ensina:</b> combinar regra do quociente com a análise de sinal de um logaritmo.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 6 ===================== -->
+<section class="theme" id="t6" data-title="Trigonometria" data-group="1">
+  <div class="eyebrow">Núcleo 11.º · Tema 6</div>
+  <h1 class="ttl">Trigonometria</h1>
+  <p class="lede">Círculo trigonométrico, equações trigonométricas e fórmulas da soma, diferença e duplicação.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip">Radianos ($\pi=180^\circ$)</span><span class="chip">Razões num triângulo retângulo</span><span class="chip">Resolução de equações</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  No <b>círculo trigonométrico</b> (raio 1), um ângulo $\theta$ marca um ponto. A sua <b>abcissa é $\cos\theta$</b> e a sua <b>ordenada é $\sin\theta$</b>. Rodando à volta do círculo, seno e cosseno oscilam entre $-1$ e $1$ — é daí que vêm as ondas. Como uma volta completa ($2\pi$) repete tudo, as equações trigonométricas têm <i>infinitas</i> soluções, espaçadas periodicamente.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Definições no círculo</h3>
+  $$\cos\theta=x,\quad \sin\theta=y,\quad \tan\theta=\frac{\sin\theta}{\cos\theta}\;(\cos\theta\neq0)$$
+  <p>Identidade fundamental: $\;\sin^2\theta+\cos^2\theta=1$.</p>
+
+  <h3>3.2 — Equações trigonométricas</h3>
+  $$\sin x=\sin\alpha\iff x=\alpha+2k\pi\;\lor\;x=\pi-\alpha+2k\pi,\;k\in\mathbb{Z}$$
+  $$\cos x=\cos\alpha\iff x=\alpha+2k\pi\;\lor\;x=-\alpha+2k\pi,\;k\in\mathbb{Z}$$
+  $$\tan x=\tan\alpha\iff x=\alpha+k\pi,\;k\in\mathbb{Z}$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\sin x=\tfrac12$. Como $\sin\tfrac\pi6=\tfrac12$: $x=\tfrac\pi6+2k\pi\;\lor\;x=\pi-\tfrac\pi6+2k\pi=\tfrac{5\pi}6+2k\pi$, $k\in\mathbb{Z}$.</p></div>
+
+  <h3>3.3 — Soma, diferença e duplicação</h3>
+  $$\sin(a\pm b)=\sin a\cos b\pm\cos a\sin b$$
+  $$\cos(a\pm b)=\cos a\cos b\mp\sin a\sin b$$
+  $$\sin2a=2\sin a\cos a,\qquad \cos2a=\cos^2a-\sin^2a=2\cos^2a-1=1-2\sin^2a$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\cos\tfrac{\pi}{12}=\cos\big(\tfrac\pi3-\tfrac\pi4\big)=\cos\tfrac\pi3\cos\tfrac\pi4+\sin\tfrac\pi3\sin\tfrac\pi4=\tfrac12\cdot\tfrac{\sqrt2}2+\tfrac{\sqrt3}2\cdot\tfrac{\sqrt2}2=\tfrac{\sqrt2+\sqrt6}{4}$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Arrasta o ponto à volta do círculo. A <span style="color:#1F5C8B"><b>abcissa</b></span> é o cosseno e a <span style="color:#A8324A"><b>ordenada</b></span> é o seno. Vê os valores e o ângulo mudarem.</p>
+  <div class="widget" id="w-trig">
+    <canvas id="cv-trig" width="360" height="360" style="max-width:360px"></canvas>
+    <div class="wreadout" id="trig-out"></div>
+    <div class="ctrls"><div class="ctrl"><label>ângulo (graus) <b id="trig-dl">30</b></label><input id="trig-d" type="range" min="0" max="360" step="1" value="30"></div></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Dar só uma solução.</b> Equações trigonométricas têm $+2k\pi$ (ou $+k\pi$ na tangente) — escreve a <i>família</i> completa.</li>
+    <li><b>Trocar o sinal em $\cos(a+b)$.</b> É $\cos a\cos b-\sin a\sin b$ (sinal trocado em relação ao seno).</li>
+    <li><b>Misturar graus e radianos.</b> No exame trabalha em radianos salvo indicação.</li>
+    <li><b>Escrever $\sin^2x=\sin x^2$.</b> $\sin^2x=(\sin x)^2\neq\sin(x^2)$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Fundamental</span><span>$\sin^2\theta+\cos^2\theta=1$</span></div>
+    <div class="frow"><span class="fl">$\sin x=\sin\alpha$</span><span>$x=\alpha+2k\pi\lor x=\pi-\alpha+2k\pi$</span></div>
+    <div class="frow"><span class="fl">$\cos x=\cos\alpha$</span><span>$x=\pm\alpha+2k\pi$</span></div>
+    <div class="frow"><span class="fl">$\tan x=\tan\alpha$</span><span>$x=\alpha+k\pi$</span></div>
+    <div class="frow"><span class="fl">Soma</span><span>$\sin(a\pm b)=\sin a\cos b\pm\cos a\sin b$</span></div>
+    <div class="frow"><span class="fl">Soma</span><span>$\cos(a\pm b)=\cos a\cos b\mp\sin a\sin b$</span></div>
+    <div class="frow"><span class="fl">Duplicação</span><span>$\sin2a=2\sin a\cos a$ · $\cos2a=2\cos^2a-1$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Sabendo que $\cos\theta=\tfrac35$ e $\theta\in]0,\tfrac\pi2[$, calcula $\sin\theta$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\sin^2\theta=1-\cos^2\theta=1-\tfrac9{25}=\tfrac{16}{25}$.</div>
+      <div class="step">Como $\theta$ é do 1.º quadrante, $\sin\theta>0$: $\sin\theta=\tfrac45$. <span class="why">— o sinal vem do quadrante.</span></div>
+      <div class="learn"><b>Ensina:</b> usar a identidade fundamental e decidir o sinal pelo quadrante.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Resolve $2\cos x-1=0$ em $\mathbb{R}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\cos x=\tfrac12=\cos\tfrac\pi3$.</div>
+      <div class="step">$x=\pm\tfrac\pi3+2k\pi,\;k\in\mathbb{Z}$. <span class="why">— modelo $\cos x=\cos\alpha$.</span></div>
+      <div class="learn"><b>Ensina:</b> isolar a razão e aplicar a família de soluções.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Resolve $\sin2x=\sin x$, $x\in[0,2\pi[$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$2\sin x\cos x=\sin x\Leftrightarrow \sin x(2\cos x-1)=0$.</div>
+      <div class="step">$\sin x=0\Rightarrow x=0,\pi$. $\;\cos x=\tfrac12\Rightarrow x=\tfrac\pi3,\tfrac{5\pi}3$.</div>
+      <div class="step">Soluções em $[0,2\pi[$: $\big\{0,\tfrac\pi3,\pi,\tfrac{5\pi}3\big\}$. <span class="why">— nunca dividir por $\sin x$ (perderias soluções); fatoriza.</span></div>
+      <div class="learn"><b>Ensina:</b> usar a duplicação e fatorizar em vez de dividir.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Mostra que $\cos2x=1-2\sin^2x$ e usa-o para resolver $\cos2x+\sin x=0$ em $[0,2\pi[$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">De $\cos2x=\cos^2x-\sin^2x$ e $\cos^2x=1-\sin^2x$: $\cos2x=1-2\sin^2x$. ✓</div>
+      <div class="step">Equação: $1-2\sin^2x+\sin x=0\Leftrightarrow 2\sin^2x-\sin x-1=0$. Com $s=\sin x$: $2s^2-s-1=0\Rightarrow s=1\lor s=-\tfrac12$.</div>
+      <div class="step">$\sin x=1\Rightarrow x=\tfrac\pi2$. $\sin x=-\tfrac12\Rightarrow x=\tfrac{7\pi}6,\tfrac{11\pi}6$.</div>
+      <div class="step">Soluções: $\big\{\tfrac\pi2,\tfrac{7\pi}6,\tfrac{11\pi}6\big\}$. </div>
+      <div class="learn"><b>Ensina:</b> reduzir tudo a uma só razão ($\sin x$) transforma a equação numa do 2.º grau.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 7 ===================== -->
+<section class="theme" id="t7" data-title="Cálculo Combinatório" data-group="2">
+  <div class="eyebrow">Núcleo 12.º · Tema 7 · maior peso</div>
+  <h1 class="ttl">Cálculo Combinatório</h1>
+  <p class="lede">Contar sem enumerar: arranjos, permutações, combinações, Triângulo de Pascal e Binómio de Newton.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip">Fatorial $n!=n(n-1)\cdots1$</span><span class="chip">Princípio multiplicativo</span><span class="chip">Frações com fatoriais</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Combinatória é <b>contar possibilidades sem as listar uma a uma</b>. A pergunta-chave em todo o exercício é: <b>a ordem importa?</b> Se sim (códigos, pódios, sequências) → <b>arranjos/permutações</b>. Se não (escolher um grupo, uma equipa, uma mão de cartas) → <b>combinações</b>. Decidir isto corretamente resolve 90% dos problemas.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Princípio multiplicativo</h3>
+  <p>Se uma tarefa tem etapas independentes com $n_1,n_2,\dots$ opções, o total é $n_1\times n_2\times\cdots$.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Matrículas com 2 letras (26) seguidas de 2 algarismos (10): $26\times26\times10\times10=67\,600$.</p></div>
+
+  <h3>3.2 — Arranjos (a ordem importa)</h3>
+  $$\text{sem repetição: }{}^{n}A_{p}=\frac{n!}{(n-p)!}\qquad\quad \text{com repetição: }{}^{n}A'_{p}=n^{p}$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Pódio (1.º,2.º,3.º) entre 8 atletas: ordem importa, sem repetir → ${}^{8}A_{3}=\dfrac{8!}{5!}=8\cdot7\cdot6=336$.</p></div>
+
+  <h3>3.3 — Permutações</h3>
+  $$P_n=n!\quad(\text{ordenar }n\text{ elementos distintos})$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Sentar 5 pessoas em fila: $P_5=5!=120$.</p></div>
+
+  <h3>3.4 — Combinações (a ordem NÃO importa)</h3>
+  $$^{n}C_{p}=\binom{n}{p}=\frac{n!}{p!\,(n-p)!}$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Escolher 3 alunos de 8 para um grupo (sem hierarquia): ${}^{8}C_{3}=\dfrac{8!}{3!\,5!}=\dfrac{8\cdot7\cdot6}{6}=56$. (Repara: é o do pódio $\div\,3!$, porque deixou de contar a ordem.)</p></div>
+
+  <h3>3.5 — Triângulo de Pascal e Binómio de Newton</h3>
+  <p>Cada número é a soma dos dois acima: $^{n}C_{p}+{}^{n}C_{p+1}={}^{n+1}C_{p+1}$. Simetria: $^{n}C_{p}={}^{n}C_{n-p}$. O Binómio de Newton:</p>
+  $$(a+b)^{n}=\sum_{p=0}^{n}{}^{n}C_{p}\,a^{\,n-p}\,b^{\,p}$$
+  <div class="ex-solved"><span class="tag">Exemplo — termo geral</span><p>Em $(2x+1)^{5}$, o termo de ordem $p+1$ é ${}^{5}C_{p}(2x)^{5-p}1^{p}$. Termo em $x^2$: $5-p=2\Rightarrow p=3$: ${}^{5}C_{3}(2x)^{2}={}10\cdot4x^2=40x^2$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>O Triângulo de Pascal: cada célula é $^{n}C_{p}$. Passa o rato (ou toca) numa célula para veres a sua leitura e como é a soma das duas de cima.</p>
+  <div class="widget" id="w-pascal">
+    <canvas id="cv-pascal" width="560" height="340"></canvas>
+    <div class="ctrls"><div class="ctrl"><label>linhas <b id="pas-nl">7</b></label><input id="pas-n" type="range" min="4" max="10" step="1" value="7"></div></div>
+    <div class="wreadout" id="pas-out">Toca numa célula.</div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Usar arranjos quando a ordem não importa.</b> "Grupo/equipa/comissão" → combinações; "pódio/código/fila" → arranjos.</li>
+    <li><b>Esquecer a repetição.</b> Se um elemento pode repetir-se (algarismos de um código), é ${}^{n}A'_{p}=n^p$.</li>
+    <li><b>Errar o termo geral do binómio.</b> O expoente de $b$ é $p$, o de $a$ é $n-p$; e há ${}^{n}C_{p}$.</li>
+    <li><b>Calcular $^nC_p$ desenvolvendo fatoriais enormes.</b> Simplifica: $\frac{8!}{5!}=8\cdot7\cdot6$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Arranjos s/ repetição</span><span>$^{n}A_{p}=\frac{n!}{(n-p)!}$</span></div>
+    <div class="frow"><span class="fl">Arranjos c/ repetição</span><span>$^{n}A'_{p}=n^{p}$</span></div>
+    <div class="frow"><span class="fl">Permutações</span><span>$P_n=n!$</span></div>
+    <div class="frow"><span class="fl">Combinações</span><span>$^{n}C_{p}=\frac{n!}{p!(n-p)!}$</span></div>
+    <div class="frow"><span class="fl">Simetria / Pascal</span><span>$^{n}C_{p}={}^{n}C_{n-p}$ · $^{n}C_{p}+{}^{n}C_{p+1}={}^{n+1}C_{p+1}$</span></div>
+    <div class="frow"><span class="fl">Binómio</span><span>$(a+b)^n=\sum_{p=0}^{n}{}^{n}C_{p}a^{n-p}b^{p}$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">De quantas maneiras se podem sentar 4 pessoas numa fila de 4 lugares?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Ordenar 4 elementos: $P_4=4!=\mathbf{24}$. <span class="why">— ordem importa, todos usados.</span></div>
+      <div class="learn"><b>Ensina:</b> "ordenar tudo" = permutação.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Numa turma de 20 escolhe-se uma comissão de 3. Quantas comissões diferentes?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Comissão não tem hierarquia → ordem não importa → combinações.</div>
+      <div class="step">$^{20}C_{3}=\dfrac{20\cdot19\cdot18}{3!}=\dfrac{6840}{6}=\mathbf{1140}$. <span class="why">— dividir por $3!$ remove a ordem.</span></div>
+      <div class="learn"><b>Ensina:</b> "comissão/grupo" é a palavra-sinal para combinações.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Quantos números de 4 algarismos <i>diferentes</i> se formam com $\{1,2,3,4,5,6\}$? E quantos são pares?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Total: ordem importa, sem repetir → $^{6}A_{4}=6\cdot5\cdot4\cdot3=360$.</div>
+      <div class="step">Pares: último algarismo $\in\{2,4,6\}$ → 3 escolhas; os outros 3 lugares com os 5 restantes em ordem: $3\times{}^{5}A_{3}=3\times(5\cdot4\cdot3)=3\times60=\mathbf{180}$. <span class="why">— fixar a restrição (paridade) primeiro.</span></div>
+      <div class="learn"><b>Ensina:</b> tratar a condição (ser par) escolhendo primeiro a posição restrita.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">No desenvolvimento de $\Big(x^2-\dfrac{2}{x}\Big)^{6}$, determina o termo independente de $x$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Termo geral: ${}^{6}C_{p}(x^2)^{6-p}\Big(-\dfrac2x\Big)^{p}={}^{6}C_{p}(-2)^{p}x^{12-2p}\,x^{-p}={}^{6}C_{p}(-2)^p x^{12-3p}$.</div>
+      <div class="step">Independente de $x$: $12-3p=0\Rightarrow p=4$.</div>
+      <div class="step">${}^{6}C_{4}(-2)^4=15\times16=\mathbf{240}$. <span class="why">— juntar expoentes de $x$ e anular.</span></div>
+      <div class="learn"><b>Ensina:</b> escrever o termo geral, somar os expoentes de $x$ e impor a condição pedida.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 8 ===================== -->
+<section class="theme" id="t8" data-title="Probabilidades" data-group="2">
+  <div class="eyebrow">Núcleo 12.º · Tema 8 · maior peso</div>
+  <h1 class="ttl">Probabilidades</h1>
+  <p class="lede">Probabilidade condicionada, independência, distribuições de probabilidade e o modelo normal.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t7')"><b>Combinatória</b></span><span class="chip">Regra de Laplace $\frac{\text{casos fav.}}{\text{casos poss.}}$</span><span class="chip">Frações e percentagens</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Probabilidade é a <b>medida da incerteza</b>, entre 0 (impossível) e 1 (certo). A <b>condicionada</b> $P(A\mid B)$ responde a "<i>sabendo que $B$ aconteceu, qual a probabilidade de $A$?</i>" — restringimos o universo a $B$. Dois acontecimentos são <b>independentes</b> quando saber um não altera a probabilidade do outro. O <b>modelo normal</b> é a "curva em sino" que descreve alturas, notas, erros de medição — fenómenos que se concentram à volta de uma média.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Regras básicas</h3>
+  $$0\le P(A)\le1,\quad P(\overline{A})=1-P(A),\quad P(A\cup B)=P(A)+P(B)-P(A\cap B)$$
+
+  <h3>3.2 — Probabilidade condicionada</h3>
+  $$P(A\mid B)=\frac{P(A\cap B)}{P(B)}\quad(P(B)\neq0)\quad\Rightarrow\quad P(A\cap B)=P(B)\,P(A\mid B)$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Numa turma, $60\%$ pratica desporto ($D$) e $25\%$ pratica desporto e música ($D\cap M$). $P(M\mid D)=\dfrac{0{,}25}{0{,}60}=\dfrac{5}{12}\approx0{,}417$.</p></div>
+
+  <h3>3.3 — Independência</h3>
+  $$A,B\text{ independentes}\iff P(A\cap B)=P(A)\,P(B)\iff P(A\mid B)=P(A)$$
+
+  <h3>3.4 — Distribuição de probabilidade e valor médio</h3>
+  <p>Uma variável aleatória $X$ toma valores $x_i$ com probabilidades $p_i$ (com $\sum p_i=1$). O <b>valor médio</b> (esperança):</p>
+  $$\mu=E(X)=\sum x_i\,p_i$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><table class="dist"><tr><th>$x_i$</th><td>0</td><td>1</td><td>2</td></tr><tr><th>$p_i$</th><td>0,2</td><td>0,5</td><td>0,3</td></tr></table><p>$\mu=0(0{,}2)+1(0{,}5)+2(0{,}3)=1{,}1$.</p></div>
+
+  <h3>3.5 — Modelo normal</h3>
+  <p>$X\sim N(\mu,\sigma)$: simétrica em torno de $\mu$, dispersão dada por $\sigma$. Regra empírica:</p>
+  <div class="prereq"><span class="chip">$\approx68\%$ em $[\mu-\sigma,\mu+\sigma]$</span><span class="chip">$\approx95\%$ em $[\mu-2\sigma,\mu+2\sigma]$</span><span class="chip">$\approx99{,}7\%$ em $[\mu-3\sigma,\mu+3\sigma]$</span></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>A curva normal $N(\mu,\sigma)$. Ajusta a média (desloca) e o desvio-padrão (alarga/estreita). A área sombreada mostra a regra dos $68$–$95$–$99{,}7$.</p>
+  <div class="widget" id="w-normal">
+    <canvas id="cv-normal" width="560" height="300"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>$\mu$ <b id="nm-ml">0</b></label><input id="nm-m" type="range" min="-3" max="3" step="0.2" value="0"></div>
+      <div class="ctrl"><label>$\sigma$ <b id="nm-sl">1</b></label><input id="nm-s" type="range" min="0.5" max="2.5" step="0.1" value="1"></div>
+      <div class="ctrl"><label>faixa <b id="nm-kl">1</b>$\sigma$</label><input id="nm-k" type="range" min="1" max="3" step="1" value="1"></div>
+    </div>
+    <div class="wreadout" id="nm-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Trocar $P(A\mid B)$ com $P(B\mid A)$.</b> O que vem <i>depois</i> da barra é a condição (o novo universo).</li>
+    <li><b>Confundir independentes com incompatíveis.</b> Incompatíveis: $P(A\cap B)=0$. Independentes: $P(A\cap B)=P(A)P(B)$.</li>
+    <li><b>Somar mal a reunião.</b> Não esquecer o $-P(A\cap B)$ em $P(A\cup B)$.</li>
+    <li><b>$\sum p_i\neq1$.</b> Numa tabela de distribuição, as probabilidades têm de somar $1$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Complementar</span><span>$P(\overline A)=1-P(A)$</span></div>
+    <div class="frow"><span class="fl">Reunião</span><span>$P(A\cup B)=P(A)+P(B)-P(A\cap B)$</span></div>
+    <div class="frow"><span class="fl">Condicionada</span><span>$P(A\mid B)=\frac{P(A\cap B)}{P(B)}$</span></div>
+    <div class="frow"><span class="fl">Independência</span><span>$P(A\cap B)=P(A)P(B)$</span></div>
+    <div class="frow"><span class="fl">Valor médio</span><span>$\mu=\sum x_i p_i$</span></div>
+    <div class="frow"><span class="fl">Normal</span><span>68% · 95% · 99,7% ($1,2,3\,\sigma$)</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">$P(A)=0{,}4$, $P(B)=0{,}5$, $P(A\cap B)=0{,}2$. Calcula $P(A\cup B)$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$P(A\cup B)=0{,}4+0{,}5-0{,}2=\mathbf{0{,}7}$. <span class="why">— aplicar a regra da reunião.</span></div>
+      <div class="learn"><b>Ensina:</b> subtrair a interseção evita contar duas vezes.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Com os dados acima, verifica se $A$ e $B$ são independentes.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$P(A)P(B)=0{,}4\times0{,}5=0{,}2$.</div>
+      <div class="step">Como $P(A\cap B)=0{,}2=P(A)P(B)$, <b>são independentes</b>. <span class="why">— testar a definição diretamente.</span></div>
+      <div class="learn"><b>Ensina:</b> independência verifica-se comparando $P(A\cap B)$ com $P(A)P(B)$.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Uma caixa tem 4 bolas vermelhas e 6 azuis. Tiram-se 2 sem reposição. Qual a probabilidade de ambas serem vermelhas?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$P(\text{1ª V})=\dfrac{4}{10}$. Sabendo que saiu uma V, restam 3 V em 9: $P(\text{2ª V}\mid\text{1ª V})=\dfrac{3}{9}$.</div>
+      <div class="step">$P(VV)=\dfrac{4}{10}\cdot\dfrac{3}{9}=\dfrac{12}{90}=\mathbf{\dfrac{2}{15}}$. <span class="why">— "sem reposição" muda o universo na 2.ª extração.</span></div>
+      <div class="step">Alternativa por combinações: $\dfrac{{}^4C_2}{{}^{10}C_2}=\dfrac{6}{45}=\dfrac{2}{15}$. ✓</div>
+      <div class="learn"><b>Ensina:</b> "sem reposição" = probabilidade condicionada (ou combinações).</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">As alturas seguem $N(170,8)$ cm. Estima a percentagem de pessoas entre $154$ e $186$ cm.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$154=170-2(8)=\mu-2\sigma$ e $186=170+2(8)=\mu+2\sigma$.</div>
+      <div class="step">Pela regra empírica, $[\mu-2\sigma,\mu+2\sigma]$ contém $\approx\mathbf{95\%}$. <span class="why">— reconhecer a faixa em múltiplos de $\sigma$.</span></div>
+      <div class="learn"><b>Ensina:</b> traduzir limites concretos em $\mu\pm k\sigma$ e aplicar 68–95–99,7.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 9 ===================== -->
+<section class="theme" id="t9" data-title="Funções (12.º) — assíntotas e Bolzano" data-group="2">
+  <div class="eyebrow">Núcleo 12.º · Tema 9 · maior peso</div>
+  <h1 class="ttl">Funções (12.º): limites, assíntotas e Bolzano</h1>
+  <p class="lede">Indeterminações em funções reais, assíntotas verticais/horizontais/oblíquas e o Teorema de Bolzano.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t3')"><b>Limites e continuidade</b></span><span class="chip" onclick="go('t4')"><b>Derivadas</b></span><span class="chip">Divisão de polinómios</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  As <b>assíntotas</b> são retas a que o gráfico se "cola" no infinito: vertical onde a função dispara para $\pm\infty$ (ex.: denominador $\to0$), horizontal para onde estabiliza quando $x\to\pm\infty$. O <b>Teorema de Bolzano</b> é puro bom-senso: se uma função contínua começa abaixo de zero e acaba acima (muda de sinal), então <i>em algum sítio cruzou o zero</i> — logo tem uma raiz nesse intervalo.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Indeterminações ($\frac\infty\infty$, $\frac00$, $\infty-\infty$)</h3>
+  <div class="ex-solved"><span class="tag">Exemplo $\frac\infty\infty$</span><p>$\displaystyle\lim_{x\to+\infty}\dfrac{3x^2-x}{x^2+1}=3$ (quociente dos termos de maior grau).</p></div>
+
+  <h3>3.2 — Assíntotas verticais</h3>
+  <p>A reta $x=a$ é assíntota vertical se $\displaystyle\lim_{x\to a^{\pm}}f(x)=\pm\infty$. Procuram-se nos pontos onde a função "explode" (zeros do denominador não anulados pelo numerador).</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=\dfrac{1}{x-2}$: quando $x\to2^+$, $f\to+\infty$. Assíntota vertical $x=2$.</p></div>
+
+  <h3>3.3 — Assíntotas horizontais e oblíquas</h3>
+  <p>Horizontal: $y=b$ se $\displaystyle\lim_{x\to\pm\infty}f(x)=b$ (finito). Oblíqua $y=mx+b$ (quando não há horizontal):</p>
+  $$m=\lim_{x\to\pm\infty}\frac{f(x)}{x},\qquad b=\lim_{x\to\pm\infty}\big(f(x)-mx\big)$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=\dfrac{x^2+1}{x}=x+\dfrac1x$. $m=\lim\dfrac{f(x)}{x}=\lim\big(1+\tfrac1{x^2}\big)=1$; $b=\lim\big(f(x)-x\big)=\lim\tfrac1x=0$. Assíntota oblíqua $y=x$.</p></div>
+
+  <h3>3.4 — Teorema de Bolzano</h3>
+  <div class="note"><div class="nt">Teorema</div>Se $f$ é <b>contínua</b> em $[a,b]$ e $f(a)\cdot f(b)<0$, então existe $c\in\,]a,b[$ tal que $f(c)=0$.</div>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=x^3+x-1$ é contínua. $f(0)=-1<0$ e $f(1)=1>0$. Como $f(0)f(1)<0$, por Bolzano existe raiz em $]0,1[$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Função racional $f(x)=\dfrac{x^2+1}{x-a}$. Move $a$: a assíntota vertical (vermelha) desloca-se com ele; a oblíqua (verde) acompanha o ramo no infinito.</p>
+  <div class="widget" id="w-asym">
+    <canvas id="cv-asym" width="560" height="340"></canvas>
+    <div class="ctrls"><div class="ctrl"><label>$a$ (assíntota vertical) <b id="as-al">1</b></label><input id="as-a" type="range" min="-3" max="3" step="0.5" value="1"></div></div>
+    <div class="wreadout" id="as-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Declarar assíntota vertical onde o numerador também se anula.</b> Verifica se não é uma indeterminação $\frac00$ (descontinuidade removível).</li>
+    <li><b>Procurar oblíqua quando já há horizontal.</b> Se existe assíntota horizontal num ramo, não há oblíqua nesse ramo.</li>
+    <li><b>Aplicar Bolzano sem garantir continuidade.</b> O teorema exige $f$ contínua no intervalo fechado.</li>
+    <li><b>Concluir "uma única raiz" por Bolzano.</b> Bolzano garante <i>pelo menos</i> uma; a unicidade vem da monotonia.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Assíntota vertical</span><span>$\lim_{x\to a^\pm}f=\pm\infty\Rightarrow x=a$</span></div>
+    <div class="frow"><span class="fl">Assíntota horizontal</span><span>$\lim_{x\to\pm\infty}f=b\Rightarrow y=b$</span></div>
+    <div class="frow"><span class="fl">Oblíqua</span><span>$m=\lim\frac{f(x)}{x},\;b=\lim(f(x)-mx)$</span></div>
+    <div class="frow"><span class="fl">Bolzano</span><span>$f$ cont., $f(a)f(b)<0\Rightarrow\exists c:f(c)=0$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Indica a assíntota horizontal de $f(x)=\dfrac{2x-1}{x+3}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\lim_{x\to\pm\infty}\dfrac{2x-1}{x+3}=2$ (coef. de maior grau).</div>
+      <div class="step">Assíntota horizontal $\mathbf{y=2}$. </div>
+      <div class="learn"><b>Ensina:</b> em racionais de grau igual, a horizontal é o quociente dos coeficientes dominantes.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Determina as assíntotas verticais de $f(x)=\dfrac{x+1}{x^2-4}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Denominador zero: $x^2-4=0\Rightarrow x=\pm2$. Numerador não se anula aí.</div>
+      <div class="step">Assíntotas verticais $\mathbf{x=2}$ e $\mathbf{x=-2}$. <span class="why">— confirmar que não há $\frac00$.</span></div>
+      <div class="learn"><b>Ensina:</b> candidatas a vertical são os zeros do denominador não cancelados.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Mostra que $f(x)=2^x+x-3$ tem um zero em $]0,2[$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f$ é contínua (soma de exponencial e polinómio).</div>
+      <div class="step">$f(0)=2^0+0-3=-2<0$; $f(2)=4+2-3=3>0$.</div>
+      <div class="step">$f(0)f(2)<0$ → por Bolzano, existe $c\in]0,2[$ com $f(c)=0$. <span class="why">— enunciar continuidade + sinais.</span></div>
+      <div class="learn"><b>Ensina:</b> estrutura-tipo de resposta Bolzano: contínua + $f(a)f(b)<0$ + conclusão.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Estuda as assíntotas de $f(x)=\dfrac{x^2}{x-1}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Vertical: $x-1=0\Rightarrow x=1$ (numerador $\neq0$) → $x=1$.</div>
+      <div class="step">Horizontal? $\lim_{x\to\infty}\dfrac{x^2}{x-1}=\infty$ → não há; procura oblíqua.</div>
+      <div class="step">$m=\lim\dfrac{x^2}{x(x-1)}=\lim\dfrac{x}{x-1}=1$. $b=\lim\Big(\dfrac{x^2}{x-1}-x\Big)=\lim\dfrac{x^2-x(x-1)}{x-1}=\lim\dfrac{x}{x-1}=1$.</div>
+      <div class="step">Oblíqua $\mathbf{y=x+1}$; vertical $\mathbf{x=1}$. </div>
+      <div class="learn"><b>Ensina:</b> sem horizontal, calcular $m$ e $b$ para a oblíqua (a divisão $\frac{x^2}{x-1}=x+1+\frac1{x-1}$ confirma).</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 10 ===================== -->
+<section class="theme" id="t10" data-title="Derivadas avançadas" data-group="2">
+  <div class="eyebrow">Núcleo 12.º · Tema 10 · maior peso</div>
+  <h1 class="ttl">Derivadas avançadas</h1>
+  <p class="lede">Segunda derivada, concavidades e pontos de inflexão — e o estudo completo de uma função.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t4')"><b>Derivadas</b></span><span class="chip" onclick="go('t5')"><b>Monotonia e extremos</b></span><span class="chip" onclick="go('t9')"><b>Assíntotas</b></span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Se $f'$ diz se a função sobe ou desce, a <b>segunda derivada $f''$</b> diz como <i>curva</i>. $f''>0$ → concavidade <b>voltada para cima</b> (sorriso $\smile$); $f''<0$ → voltada para <b>baixo</b> ($\frown$). Onde a concavidade <i>muda</i> está um <b>ponto de inflexão</b>. Juntar tudo (domínio, sinais de $f'$ e $f''$, assíntotas) dá o <b>estudo completo</b> que permite esboçar o gráfico sem máquina.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Segunda derivada e concavidade</h3>
+  <div class="prereq"><span class="chip">$f''(x)>0$ → concavidade para cima</span><span class="chip">$f''(x)<0$ → concavidade para baixo</span></div>
+  <p><b>Ponto de inflexão:</b> abcissa onde $f''$ <i>muda de sinal</i> (em geral $f''=0$ com mudança).</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$f(x)=x^3$: $f'=3x^2$, $f''=6x$. $f''<0$ para $x<0$ ($\frown$), $f''>0$ para $x>0$ ($\smile$). Em $x=0$ há <b>ponto de inflexão</b> $(0,0)$.</p></div>
+
+  <h3>3.2 — Estudo completo (roteiro)</h3>
+  <ol style="margin:8px 0 8px 4px;padding-left:18px">
+    <li>Domínio e (se útil) paridade.</li>
+    <li>Zeros e sinal de $f$; interseções com os eixos.</li>
+    <li>Assíntotas (verticais, horizontais, oblíquas).</li>
+    <li>$f'$ → monotonia e extremos.</li>
+    <li>$f''$ → concavidades e inflexões.</li>
+    <li>Esboço coerente com tudo o acima.</li>
+  </ol>
+  <div class="ex-solved"><span class="tag">Exemplo curto</span><p>$f(x)=x^3-3x^2$. $f'=3x^2-6x=3x(x-2)$ → extremos em $x=0$ (máx, $f=0$) e $x=2$ (mín, $f=-4$). $f''=6x-6$, zero em $x=1$, muda de sinal → inflexão em $(1,-2)$.</p></div>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>$f(x)=x^3+cx^2$ a azul, $f''$ a tracejado. Ajusta $c$ e vê onde $f''$ muda de sinal — aí o gráfico passa de $\frown$ para $\smile$ (ponto de inflexão).</p>
+  <div class="widget" id="w-conc">
+    <canvas id="cv-conc" width="560" height="320"></canvas>
+    <div class="ctrls"><div class="ctrl"><label>$c$ <b id="cc-cl">-2</b></label><input id="cc-c" type="range" min="-4" max="4" step="0.5" value="-2"></div></div>
+    <div class="wreadout" id="cc-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Dizer "inflexão" sempre que $f''=0$.</b> Exige <i>mudança</i> de sinal de $f''$ (ex.: $x^4$ tem $f''(0)=0$ mas não inflete).</li>
+    <li><b>Trocar concavidade.</b> $f''>0$ é "para cima" ($\smile$), não para baixo.</li>
+    <li><b>Esquecer o domínio no estudo completo.</b> Sinais e assíntotas dependem do domínio.</li>
+    <li><b>Misturar extremos (de $f'$) com inflexões (de $f''$).</b> São análises diferentes.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Concavidade ↑</span><span>$f''>0$</span></div>
+    <div class="frow"><span class="fl">Concavidade ↓</span><span>$f''<0$</span></div>
+    <div class="frow"><span class="fl">Inflexão</span><span>$f''$ muda de sinal</span></div>
+    <div class="frow"><span class="fl">Roteiro</span><span>D → zeros → assíntotas → $f'$ → $f''$ → esboço</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Estuda a concavidade de $f(x)=x^2-4x$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'=2x-4$, $f''=2>0$ sempre.</div>
+      <div class="step">Concavidade <b>voltada para cima</b> em todo o $\mathbb{R}$; sem inflexões. </div>
+      <div class="learn"><b>Ensina:</b> $f''$ constante positiva → parábola "sorriso".</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Determina os pontos de inflexão de $f(x)=x^3-6x^2+5$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'=3x^2-12x$, $f''=6x-12$.</div>
+      <div class="step">$f''=0\Rightarrow x=2$; muda de $-$ para $+$ → inflexão. $f(2)=8-24+5=-11$.</div>
+      <div class="step">Ponto de inflexão $(2,-11)$. <span class="why">— confirmar mudança de sinal de $f''$.</span></div>
+      <div class="learn"><b>Ensina:</b> inflexão pede zero de $f''$ <i>com</i> troca de sinal.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Justifica que $f(x)=x^4$ não tem ponto de inflexão em $x=0$ apesar de $f''(0)=0$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f''=12x^2\ge0$ para todo o $x$.</div>
+      <div class="step">$f''$ <b>não muda de sinal</b> em $x=0$ (é sempre $\ge0$) → concavidade sempre para cima → <b>sem inflexão</b>. <span class="why">— a condição é mudança de sinal, não apenas $f''=0$.</span></div>
+      <div class="learn"><b>Ensina:</b> distinguir "$f''=0$" de "muda de concavidade".</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Faz o estudo (monotonia, extremos, concavidade, inflexão) de $f(x)=x^3-3x^2+4$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$f'=3x^2-6x=3x(x-2)$; zeros $x=0,2$. Sinal $+,-,+$ → máx em $x=0$ ($f=4$), mín em $x=2$ ($f=0$).</div>
+      <div class="step">$f''=6x-6$; zero $x=1$, muda de sinal → inflexão $(1,2)$. Concavidade $\frown$ para $x<1$, $\smile$ para $x>1$.</div>
+      <div class="step">Resumo: cresce em $]-\infty,0]\cup[2,+\infty[$, decresce em $[0,2]$; inflexão em $(1,2)$. </div>
+      <div class="learn"><b>Ensina:</b> combinar análise de $f'$ e $f''$ num único quadro coerente.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 11 ===================== -->
+<section class="theme" id="t11" data-title="Exponenciais e logaritmos" data-group="2">
+  <div class="eyebrow">Núcleo 12.º · Tema 11 · maior peso</div>
+  <h1 class="ttl">Funções exponenciais e logarítmicas</h1>
+  <p class="lede">Propriedades, equações, inequações, limites notáveis e modelação de crescimento/decaimento.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip">Potências e suas regras</span><span class="chip" onclick="go('t4')"><b>Derivadas</b></span><span class="chip" onclick="go('t9')"><b>Limites</b></span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  A <b>exponencial</b> $a^x$ ($a>1$) cresce <i>cada vez mais depressa</i> — duplica em intervalos iguais (juros, populações, vírus). O <b>logaritmo</b> é a sua função inversa: $\log_a y$ responde "<i>a que expoente tenho de elevar $a$ para obter $y$?</i>". Por isso transforma multiplicações em somas e "desfaz" expoentes — é a chave para resolver equações onde a incógnita está no expoente.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Definição e inversa</h3>
+  $$y=a^{x}\iff x=\log_a y\quad(a>0,\,a\neq1),\qquad \ln x=\log_e x$$
+  <p>Em particular: $\ln(e^x)=x$ e $e^{\ln x}=x$.</p>
+
+  <h3>3.2 — Propriedades dos logaritmos</h3>
+  $$\log_a(xy)=\log_a x+\log_a y,\quad \log_a\frac xy=\log_a x-\log_a y,\quad \log_a x^{k}=k\log_a x$$
+  $$\text{mudança de base: }\;\log_a x=\frac{\ln x}{\ln a}$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\log_2 40-\log_2 5=\log_2\dfrac{40}{5}=\log_2 8=3$.</p></div>
+
+  <h3>3.3 — Equações e inequações</h3>
+  <div class="ex-solved"><span class="tag">Exemplo (exponencial)</span><p>$3^{x}=81\Leftrightarrow 3^x=3^4\Leftrightarrow x=4$. Se as bases não igualam: $2^x=10\Leftrightarrow x=\log_2 10=\dfrac{\ln10}{\ln2}$.</p></div>
+  <div class="ex-solved"><span class="tag">Exemplo (logarítmica)</span><p>$\ln(x-1)=2\Leftrightarrow x-1=e^2\Leftrightarrow x=1+e^2$. <b>Sempre verificar o domínio:</b> aqui exige $x>1$, e $1+e^2>1$. ✓</p></div>
+
+  <h3>3.4 — Derivadas e limites notáveis</h3>
+  $$\big(e^{x}\big)'=e^{x},\quad (\ln x)'=\frac1x,\quad \big(a^{x}\big)'=a^{x}\ln a$$
+  $$\lim_{x\to0}\frac{e^{x}-1}{x}=1,\qquad \lim_{x\to+\infty}\frac{e^{x}}{x^{p}}=+\infty,\qquad \lim_{x\to+\infty}\frac{\ln x}{x}=0$$
+  <p>Leitura: a exponencial "ganha" a qualquer potência; o logaritmo "perde" para qualquer potência.</p>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>$y=a^x$ (azul) e a sua inversa $y=\log_a x$ (verde), espelhadas na reta $y=x$. Muda a base $a$ e vê o crescimento acelerar ou abrandar.</p>
+  <div class="widget" id="w-explog">
+    <canvas id="cv-explog" width="560" height="340"></canvas>
+    <div class="ctrls"><div class="ctrl"><label>base $a$ <b id="el-al">2</b></label><input id="el-a" type="range" min="1.2" max="4" step="0.1" value="2"></div></div>
+    <div class="wreadout" id="el-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>$\log(x+y)=\log x+\log y$.</b> FALSO. A propriedade é do <i>produto</i>: $\log(xy)=\log x+\log y$.</li>
+    <li><b>Esquecer o domínio da equação logarítmica.</b> $\ln(\cdot)$ só existe para argumento $>0$ — verifica as soluções.</li>
+    <li><b>$(e^x)'=xe^{x-1}$.</b> Não! A exponencial deriva-se a si própria: $(e^x)'=e^x$.</li>
+    <li><b>Inverter sinal de inequação à toa.</b> Em $a^{f(x)}<a^{g(x)}$ com $0<a<1$ a função é decrescente → a desigualdade <i>inverte</i>.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Inversa</span><span>$y=a^x\iff x=\log_a y$</span></div>
+    <div class="frow"><span class="fl">Produto / Quociente / Potência</span><span>$\log(xy)=\log x+\log y$ · $\log x^k=k\log x$</span></div>
+    <div class="frow"><span class="fl">Mudança de base</span><span>$\log_a x=\frac{\ln x}{\ln a}$</span></div>
+    <div class="frow"><span class="fl">Derivadas</span><span>$(e^x)'=e^x$ · $(\ln x)'=\frac1x$ · $(a^x)'=a^x\ln a$</span></div>
+    <div class="frow"><span class="fl">Notáveis</span><span>$\lim_{x\to0}\frac{e^x-1}{x}=1$ · $\lim\frac{\ln x}{x}=0$ · $\lim\frac{e^x}{x^p}=+\infty$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Resolve $2^{x}=32$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$32=2^5$, logo $2^x=2^5\Rightarrow x=\mathbf{5}$. <span class="why">— igualar bases.</span></div>
+      <div class="learn"><b>Ensina:</b> escrever ambos os lados na mesma base resolve de imediato.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Resolve $\ln(2x-3)=0$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\ln(2x-3)=0\Leftrightarrow 2x-3=e^0=1\Leftrightarrow x=2$.</div>
+      <div class="step">Domínio: $2x-3>0\Leftrightarrow x>\tfrac32$; $2>\tfrac32$ ✓ → $x=\mathbf{2}$. <span class="why">— validar no domínio.</span></div>
+      <div class="learn"><b>Ensina:</b> aplicar a exponencial a ambos os lados e confirmar o domínio.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Calcula $\displaystyle\lim_{x\to0}\dfrac{e^{3x}-1}{x}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Multiplica e divide por $3$: $\dfrac{e^{3x}-1}{x}=3\cdot\dfrac{e^{3x}-1}{3x}$.</div>
+      <div class="step">Com $u=3x\to0$: $\dfrac{e^u-1}{u}\to1$. Logo o limite é $3\times1=\mathbf{3}$. <span class="why">— reduzir ao notável $\frac{e^u-1}{u}$.</span></div>
+      <div class="learn"><b>Ensina:</b> "fabricar" a forma do limite notável ajustando a constante.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Uma cultura de bactérias segue $N(t)=200\,e^{0{,}3t}$ ($t$ em horas). Em quanto tempo duplica?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Duplicar: $N(t)=400\Leftrightarrow 200e^{0{,}3t}=400\Leftrightarrow e^{0{,}3t}=2$.</div>
+      <div class="step">$0{,}3t=\ln2\Rightarrow t=\dfrac{\ln2}{0{,}3}\approx2{,}31$ h. <span class="why">— logaritmizar para libertar o expoente.</span></div>
+      <div class="learn"><b>Ensina:</b> modelar crescimento e usar $\ln$ para resolver a incógnita no expoente.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 12 ===================== -->
+<section class="theme" id="t12" data-title="Números Complexos" data-group="2">
+  <div class="eyebrow">Núcleo 12.º · Tema 12 · maior peso</div>
+  <h1 class="ttl">Números Complexos</h1>
+  <p class="lede">Forma algébrica e trigonométrica, operações, Fórmula de De Moivre, plano de Argand e raízes.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t6')"><b>Trigonometria</b></span><span class="chip">Coordenadas no plano</span><span class="chip">$\sqrt{-1}=i$, com $i^2=-1$</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Não existe número real cujo quadrado seja negativo — então inventa-se a <b>unidade imaginária</b> $i$ com $i^2=-1$. Um complexo $z=a+bi$ é um <b>ponto $(a,b)$ no plano</b>: o eixo horizontal é a parte real, o vertical a parte imaginária. Visto como ponto, $z$ tem uma <b>distância à origem</b> ($\rho$, o módulo) e um <b>ângulo</b> ($\theta$, o argumento). Multiplicar dois complexos <i>multiplica módulos e soma ângulos</i> — é por isso que a forma trigonométrica torna potências e raízes fáceis.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Forma algébrica e conjugado</h3>
+  $$z=a+bi,\quad \operatorname{Re}(z)=a,\ \operatorname{Im}(z)=b,\qquad \bar z=a-bi,\qquad |z|=\sqrt{a^2+b^2}$$
+  <p>Potências de $i$ (ciclo de 4): $i^1=i,\ i^2=-1,\ i^3=-i,\ i^4=1$.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Divisão: $\dfrac{2+i}{1-i}=\dfrac{(2+i)(1+i)}{(1-i)(1+i)}=\dfrac{2+2i+i+i^2}{1-i^2}=\dfrac{1+3i}{2}=\tfrac12+\tfrac32 i$. <i>(multiplicar pelo conjugado do denominador)</i></p></div>
+
+  <h3>3.2 — Forma trigonométrica (cis)</h3>
+  $$z=\rho\,\operatorname{cis}\theta=\rho(\cos\theta+i\sin\theta),\qquad \rho=|z|,\quad \tan\theta=\tfrac{b}{a}$$
+  <p>Atenção ao <b>quadrante</b> ao determinar $\theta$ a partir de $\tan\theta$.</p>
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$z=-1+i$: $\rho=\sqrt{1+1}=\sqrt2$; está no 2.º quadrante, $\theta=\tfrac{3\pi}{4}$. Logo $z=\sqrt2\,\operatorname{cis}\tfrac{3\pi}{4}$.</p></div>
+
+  <h3>3.3 — Produto, quociente e De Moivre</h3>
+  $$\rho_1\operatorname{cis}\theta_1\cdot\rho_2\operatorname{cis}\theta_2=\rho_1\rho_2\operatorname{cis}(\theta_1+\theta_2),\qquad \frac{\rho_1\operatorname{cis}\theta_1}{\rho_2\operatorname{cis}\theta_2}=\frac{\rho_1}{\rho_2}\operatorname{cis}(\theta_1-\theta_2)$$
+  $$\big(\rho\operatorname{cis}\theta\big)^{n}=\rho^{\,n}\operatorname{cis}(n\theta)\quad\text{(De Moivre)}$$
+
+  <h3>3.4 — Raízes de índice $n$</h3>
+  $$\sqrt[n]{\rho\operatorname{cis}\theta}=\sqrt[n]{\rho}\;\operatorname{cis}\!\Big(\frac{\theta+2k\pi}{n}\Big),\quad k=0,1,\dots,n-1$$
+  <p>As $n$ raízes formam um <b>polígono regular</b> de $n$ vértices sobre a circunferência de raio $\sqrt[n]{\rho}$.</p>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Plano de Argand. Ajusta o módulo $\rho$ e o argumento $\theta$ e vê o ponto $z=\rho\operatorname{cis}\theta$, a sua forma algébrica e o conjugado $\bar z$ (a cinzento).</p>
+  <div class="widget" id="w-argand">
+    <canvas id="cv-argand" width="560" height="340"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>$\rho$ <b id="ar-rl">2</b></label><input id="ar-r" type="range" min="0.5" max="3" step="0.1" value="2"></div>
+      <div class="ctrl"><label>$\theta$ (graus) <b id="ar-tl">45</b></label><input id="ar-t" type="range" min="0" max="360" step="5" value="45"></div>
+    </div>
+    <div class="wreadout" id="ar-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Argumento no quadrante errado.</b> $\tan\theta=\tfrac ba$ tem duas soluções por volta — escolhe a do quadrante de $(a,b)$.</li>
+    <li><b>Esquecer o $2k\pi$ nas raízes.</b> Sem ele só encontras 1 raiz em vez de $n$.</li>
+    <li><b>Trocar $i^2$ por $1$.</b> $i^2=-1$ (é o ponto todo).</li>
+    <li><b>Dividir sem conjugado.</b> Para $\tfrac{z}{w}$ na forma algébrica, multiplica numerador e denominador por $\bar w$.</li>
+    <li><b>Usar graus e radianos misturados.</b> No exame trabalha-se em radianos.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Módulo</span><span>$|z|=\sqrt{a^2+b^2}$</span></div>
+    <div class="frow"><span class="fl">Trigonométrica</span><span>$z=\rho\operatorname{cis}\theta$</span></div>
+    <div class="frow"><span class="fl">Produto</span><span>$\rho_1\rho_2\operatorname{cis}(\theta_1+\theta_2)$</span></div>
+    <div class="frow"><span class="fl">De Moivre</span><span>$z^n=\rho^n\operatorname{cis}(n\theta)$</span></div>
+    <div class="frow"><span class="fl">Raízes</span><span>$\sqrt[n]\rho\,\operatorname{cis}\frac{\theta+2k\pi}{n}$, $k=0..n-1$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Calcula $(3+2i)+(1-5i)$ e $(2+i)(1+i)$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Soma: $(3+1)+(2-5)i=4-3i$.</div>
+      <div class="step">Produto: $2+2i+i+i^2=2+3i-1=1+3i$. <span class="why">— usar $i^2=-1$.</span></div>
+      <div class="learn"><b>Ensina:</b> operar na forma algébrica somando partes reais e imaginárias.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Escreve $z=1+\sqrt3\,i$ na forma trigonométrica.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\rho=\sqrt{1+3}=2$.</div>
+      <div class="step">$\tan\theta=\tfrac{\sqrt3}{1}=\sqrt3$, ponto no 1.º quadrante → $\theta=\tfrac\pi3$.</div>
+      <div class="step">$z=2\operatorname{cis}\tfrac\pi3$. <span class="why">— confirmar quadrante de $(1,\sqrt3)$.</span></div>
+      <div class="learn"><b>Ensina:</b> converter algébrica → trigonométrica com cuidado no argumento.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Usa De Moivre para calcular $\big(\sqrt2\operatorname{cis}\tfrac\pi4\big)^{4}$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\rho^4=(\sqrt2)^4=4$; $n\theta=4\cdot\tfrac\pi4=\pi$.</div>
+      <div class="step">$=4\operatorname{cis}\pi=4(\cos\pi+i\sin\pi)=-4$. <span class="why">— módulo elevado a $n$, argumento multiplicado por $n$.</span></div>
+      <div class="learn"><b>Ensina:</b> potências ficam triviais na forma trigonométrica.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">Determina as raízes cúbicas de $8\operatorname{cis}\pi$ (isto é, de $-8$).</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\sqrt[3]{8}=2$; argumentos $\dfrac{\pi+2k\pi}{3}$, $k=0,1,2$.</div>
+      <div class="step">$k=0:\ 2\operatorname{cis}\tfrac\pi3$; $\ k=1:\ 2\operatorname{cis}\pi=-2$; $\ k=2:\ 2\operatorname{cis}\tfrac{5\pi}3$.</div>
+      <div class="step">Três raízes igualmente espaçadas ($120^\circ$) num círculo de raio $2$. <span class="why">— $2k\pi$ gera todas as raízes.</span></div>
+      <div class="learn"><b>Ensina:</b> $n$ raízes = polígono regular; não esquecer nenhum $k$.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 13 ===================== -->
+<section class="theme" id="t13" data-title="Geometria" data-group="3">
+  <div class="eyebrow">Tema oficial · Tema 13 · avaliado em 2026</div>
+  <h1 class="ttl">Geometria analítica e produto escalar</h1>
+  <p class="lede">Vetores no plano e no espaço, produto escalar, perpendicularidade, retas, planos e superfícies.</p>
+
+  <div class="note warn"><div class="nt">A verificar</div>Para fórmulas de <b>áreas e volumes</b> (e a forma exata de equações de planos/esferas pedida na cotação) confirma sempre o <b>formulário oficial do IAVE 635</b>. Aqui dou as relações nucleares; o formulário é a fonte canónica.</div>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip" onclick="go('t6')"><b>Trigonometria</b></span><span class="chip">Teorema de Pitágoras</span><span class="chip">Coordenadas $(x,y)$ e $(x,y,z)$</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Um <b>vetor</b> guarda <i>direção, sentido e comprimento</i>. O <b>produto escalar</b> $\vec u\cdot\vec v$ mede o quanto dois vetores "apontam para o mesmo lado": é máximo quando paralelos, <b>zero quando perpendiculares</b>, negativo quando opostos. Essa propriedade — perpendicular $\Leftrightarrow$ produto escalar nulo — é a ferramenta central para encontrar ângulos, retas perpendiculares e equações de planos.</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Vetores, norma e ponto médio</h3>
+  $$\vec{AB}=B-A,\qquad \|\vec u\|=\sqrt{u_1^2+u_2^2}\ \ (\text{plano}),\quad \sqrt{u_1^2+u_2^2+u_3^2}\ \ (\text{espaço})$$
+  $$M_{AB}=\Big(\tfrac{x_A+x_B}{2},\,\tfrac{y_A+y_B}{2}\,(,\tfrac{z_A+z_B}{2})\Big)$$
+
+  <h3>3.2 — Produto escalar</h3>
+  $$\vec u\cdot\vec v=u_1v_1+u_2v_2(+u_3v_3)=\|\vec u\|\,\|\vec v\|\cos\theta$$
+  $$\cos\theta=\frac{\vec u\cdot\vec v}{\|\vec u\|\,\|\vec v\|},\qquad \vec u\perp\vec v\iff \vec u\cdot\vec v=0$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>$\vec u=(3,1)$, $\vec v=(-2,6)$: $\vec u\cdot\vec v=3(-2)+1\cdot6=0$ → <b>perpendiculares</b>.</p></div>
+
+  <h3>3.3 — Retas e planos</h3>
+  <div class="prereq"><span class="chip">Reta no plano: $y=mx+b$</span><span class="chip">Reta (vetorial): $(x,y,z)=P+k\vec v$</span><span class="chip">Plano: $a x+b y+c z=d$, normal $\vec n=(a,b,c)$</span></div>
+  <p>Duas retas no plano: <b>perpendiculares</b> $\iff m_1\cdot m_2=-1$; <b>paralelas</b> $\iff m_1=m_2$.</p>
+
+  <h3>3.4 — Circunferência e superfície esférica</h3>
+  $$(x-a)^2+(y-b)^2=r^2,\qquad (x-a)^2+(y-b)^2+(z-c)^2=r^2$$
+  <p>Centro $(a,b)$ ou $(a,b,c)$, raio $r$.</p>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Arrasta o ângulo entre dois vetores e observa o produto escalar. Quando os vetores ficam perpendiculares, $\vec u\cdot\vec v=0$.</p>
+  <div class="widget" id="w-dot">
+    <canvas id="cv-dot" width="560" height="340"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>ângulo de $\vec v$ (graus) <b id="dt-al">60</b></label><input id="dt-a" type="range" min="0" max="360" step="5" value="60"></div>
+      <div class="ctrl"><label>$\|\vec v\|$ <b id="dt-ml">2.5</b></label><input id="dt-m" type="range" min="1" max="3.5" step="0.1" value="2.5"></div>
+    </div>
+    <div class="wreadout" id="dt-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Confundir $\vec{AB}$ com $\vec{BA}$.</b> $\vec{AB}=B-A$ (chegada menos partida).</li>
+    <li><b>Produto escalar dá vetor.</b> Não — dá um <i>número</i> (escalar).</li>
+    <li><b>Esquecer a 3.ª coordenada no espaço.</b> A norma e o produto escalar levam $z$.</li>
+    <li><b>$m_1 m_2=-1$ no espaço.</b> Essa regra de declives é só no plano; no espaço usa $\vec u\cdot\vec v=0$.</li>
+    <li><b>Trocar o sinal do centro da circunferência.</b> $(x-a)^2$ → centro $+a$, não $-a$.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Norma (espaço)</span><span>$\sqrt{u_1^2+u_2^2+u_3^2}$</span></div>
+    <div class="frow"><span class="fl">Produto escalar</span><span>$u_1v_1+u_2v_2+u_3v_3$</span></div>
+    <div class="frow"><span class="fl">Ângulo</span><span>$\cos\theta=\dfrac{\vec u\cdot\vec v}{\|\vec u\|\|\vec v\|}$</span></div>
+    <div class="frow"><span class="fl">Perpendicular</span><span>$\vec u\cdot\vec v=0$</span></div>
+    <div class="frow"><span class="fl">Esfera</span><span>$(x-a)^2+(y-b)^2+(z-c)^2=r^2$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Dados $A(1,2)$ e $B(4,6)$, calcula $\vec{AB}$ e $\|\vec{AB}\|$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\vec{AB}=B-A=(3,4)$.</div>
+      <div class="step">$\|\vec{AB}\|=\sqrt{3^2+4^2}=\sqrt{25}=5$. <span class="why">— Pitágoras nas componentes.</span></div>
+      <div class="learn"><b>Ensina:</b> vetor entre pontos e seu comprimento.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Verifica se $\vec u=(2,-1,3)$ e $\vec v=(1,5,1)$ são perpendiculares.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\vec u\cdot\vec v=2\cdot1+(-1)\cdot5+3\cdot1=2-5+3=0$.</div>
+      <div class="step">Produto escalar nulo → <b>perpendiculares</b>. <span class="why">— incluir a 3.ª coordenada.</span></div>
+      <div class="learn"><b>Ensina:</b> teste de perpendicularidade no espaço.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Determina o ângulo entre $\vec u=(1,2)$ e $\vec v=(3,1)$ (em graus, aprox.).</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\vec u\cdot\vec v=1\cdot3+2\cdot1=5$; $\|\vec u\|=\sqrt5$, $\|\vec v\|=\sqrt{10}$.</div>
+      <div class="step">$\cos\theta=\dfrac{5}{\sqrt5\sqrt{10}}=\dfrac{5}{\sqrt{50}}=\dfrac{5}{5\sqrt2}=\dfrac{1}{\sqrt2}$.</div>
+      <div class="step">$\theta=45^\circ$. <span class="why">— $\cos\theta=\tfrac{1}{\sqrt2}$ é exato.</span></div>
+      <div class="learn"><b>Ensina:</b> ângulo via produto escalar e normas.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">A circunferência tem centro $C(2,-1)$ e passa em $P(5,3)$. Escreve a sua equação.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Raio $r=\|\vec{CP}\|=\sqrt{(5-2)^2+(3+1)^2}=\sqrt{9+16}=5$.</div>
+      <div class="step">Equação: $(x-2)^2+(y+1)^2=25$. <span class="why">— centro $(2,-1)$ entra com sinais trocados.</span></div>
+      <div class="learn"><b>Ensina:</b> obter o raio com distância e montar a equação.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+<!-- ===================== TEMA 14 ===================== -->
+<section class="theme" id="t14" data-title="Estatística" data-group="3">
+  <div class="eyebrow">Tema oficial · Tema 14 · avaliado em 2026</div>
+  <h1 class="ttl">Estatística</h1>
+  <p class="lede">Medidas de localização e dispersão, e a ligação ao modelo normal.</p>
+
+  <h2 class="block t-pre"><span class="bn">1</span>Pré-requisitos</h2>
+  <div class="prereq"><span class="chip">Somatórios e médias</span><span class="chip" onclick="go('t8')"><b>Modelo normal</b></span><span class="chip">Ordenar dados</span></div>
+
+  <h2 class="block t-intu"><span class="bn">2</span>Intuição primeiro</h2>
+  <div class="note intu"><div class="nt">A ideia</div>
+  Para resumir muitos dados usamos dois tipos de número: <b>onde estão centrados</b> (média, mediana, moda) e <b>quão espalhados estão</b> (desvio padrão). Duas turmas podem ter a <i>mesma média</i> e ser muito diferentes — uma toda junta, outra muito dispersa. O <b>desvio padrão</b> capta essa diferença, e liga-se diretamente ao <b>modelo normal</b> (regra 68–95–99,7).</div>
+
+  <h2 class="block t-build"><span class="bn">3</span>Construção formal</h2>
+  <h3>3.1 — Medidas de localização</h3>
+  $$\bar x=\frac{1}{n}\sum_{i=1}^{n}x_i=\frac{\sum x_i\,n_i}{\sum n_i}\quad(\text{dados agrupados})$$
+  <p><b>Mediana:</b> valor central dos dados <i>ordenados</i> (média dos dois centrais se $n$ par). <b>Moda:</b> valor mais frequente.</p>
+
+  <h3>3.2 — Medidas de dispersão</h3>
+  $$\text{variância: } \sigma^2=\frac1n\sum_{i=1}^n (x_i-\bar x)^2,\qquad \text{desvio padrão: }\sigma=\sqrt{\sigma^2}$$
+  <div class="ex-solved"><span class="tag">Exemplo</span><p>Dados $2,4,4,6,9$: $\bar x=\tfrac{25}{5}=5$. Desvios$^2$: $9,1,1,1,16$ → soma $28$; $\sigma^2=\tfrac{28}{5}=5{,}6$; $\sigma\approx2{,}37$. Mediana $=4$, moda $=4$.</p></div>
+
+  <h3>3.3 — Ligação ao modelo normal</h3>
+  <p>Numa distribuição $\approx$ normal de média $\mu$ e desvio padrão $\sigma$: $\approx 68\%$ em $[\mu-\sigma,\mu+\sigma]$, $\approx95\%$ em $[\mu-2\sigma,\mu+2\sigma]$, $\approx99{,}7\%$ em $[\mu-3\sigma,\mu+3\sigma]$.</p>
+
+  <h2 class="block t-viz"><span class="bn">4</span>Visualização interativa</h2>
+  <p>Conjunto de dados em barras. Move o controlo para deslocar o último valor e vê a média (linha) e o desvio padrão a mudar.</p>
+  <div class="widget" id="w-stat">
+    <canvas id="cv-stat" width="560" height="320"></canvas>
+    <div class="ctrls">
+      <div class="ctrl"><label>último valor <b id="st-vl">9</b></label><input id="st-v" type="range" min="2" max="14" step="1" value="9"></div>
+    </div>
+    <div class="wreadout" id="st-out"></div>
+  </div>
+
+  <h2 class="block t-err"><span class="bn">5</span>Erros comuns</h2>
+  <ul class="erros">
+    <li><b>Mediana sem ordenar.</b> Ordena primeiro; só depois apanha o(s) valor(es) central(is).</li>
+    <li><b>Confundir variância com desvio padrão.</b> $\sigma=\sqrt{\sigma^2}$ — o desvio padrão tem a mesma unidade dos dados.</li>
+    <li><b>Esquecer as frequências em dados agrupados.</b> Cada $x_i$ conta $n_i$ vezes.</li>
+    <li><b>Aplicar 68–95–99,7 a dados muito assimétricos.</b> A regra é para distribuições $\approx$ normais.</li>
+  </ul>
+
+  <h2 class="block t-form"><span class="bn">6</span>Formulário do tema</h2>
+  <div class="formulario">
+    <div class="frow"><span class="fl">Média</span><span>$\bar x=\frac1n\sum x_i$</span></div>
+    <div class="frow"><span class="fl">Média (agrup.)</span><span>$\frac{\sum x_i n_i}{\sum n_i}$</span></div>
+    <div class="frow"><span class="fl">Variância</span><span>$\sigma^2=\frac1n\sum (x_i-\bar x)^2$</span></div>
+    <div class="frow"><span class="fl">Desvio padrão</span><span>$\sigma=\sqrt{\sigma^2}$</span></div>
+    <div class="frow"><span class="fl">Normal</span><span>$68$–$95$–$99{,}7$ em $\mu\pm\sigma,2\sigma,3\sigma$</span></div>
+  </div>
+
+  <h2 class="block t-ex"><span class="bn">7</span>Zona de exercícios</h2>
+  <div class="exset">
+    <div class="exq"><span class="lvl l1">Fácil</span><div class="qtxt">Calcula média, mediana e moda de $3,5,5,7,10$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">Média $=\tfrac{3+5+5+7+10}{5}=\tfrac{30}{5}=6$.</div>
+      <div class="step">Ordenados, o central é $5$ → mediana $5$; valor mais frequente $5$ → moda $5$.</div>
+      <div class="learn"><b>Ensina:</b> distinguir as três medidas de centro.</div></div></div>
+
+    <div class="exq"><span class="lvl l2">Médio</span><div class="qtxt">Determina o desvio padrão de $4,4,6,8,8$.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\bar x=\tfrac{30}{5}=6$. Desvios$^2$: $4,4,0,4,4$ → soma $16$.</div>
+      <div class="step">$\sigma^2=\tfrac{16}{5}=3{,}2$; $\sigma=\sqrt{3{,}2}\approx1{,}79$. <span class="why">— elevar ao quadrado antes de somar.</span></div>
+      <div class="learn"><b>Ensina:</b> caminho variância → desvio padrão.</div></div></div>
+
+    <div class="exq"><span class="lvl l3">Difícil</span><div class="qtxt">Numa tabela, o valor $2$ aparece $3$ vezes, $5$ aparece $4$ vezes e $8$ aparece $3$ vezes. Calcula a média.</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$\sum x_i n_i=2\cdot3+5\cdot4+8\cdot3=6+20+24=50$; $\sum n_i=10$.</div>
+      <div class="step">$\bar x=\tfrac{50}{10}=5$. <span class="why">— ponderar cada valor pela frequência.</span></div>
+      <div class="learn"><b>Ensina:</b> média de dados agrupados.</div></div></div>
+
+    <div class="exq"><span class="lvl l4">Tipo-exame</span><div class="qtxt">As alturas seguem um modelo normal com $\mu=170$ cm e $\sigma=8$ cm. Que percentagem está entre $162$ e $186$ cm?</div>
+      <button class="solve-btn" onclick="tog(this)">ver resolução</button>
+      <div class="sol"><div class="step">$162=\mu-\sigma$ e $186=\mu+2\sigma$.</div>
+      <div class="step">De $\mu-\sigma$ a $\mu$: metade de $68\%=34\%$. De $\mu$ a $\mu+2\sigma$: metade de $95\%=47{,}5\%$.</div>
+      <div class="step">Total $\approx 34\%+47{,}5\%=81{,}5\%$. <span class="why">— a regra é simétrica em torno de $\mu$.</span></div>
+      <div class="learn"><b>Ensina:</b> usar a regra 68–95–99,7 com intervalos assimétricos.</div></div></div>
+  </div>
+
+  <div class="revfoot"><input type="checkbox"> Revisto contra fonte oficial?</div>
+</section>
+</div></main>
+</div><!-- /shell -->
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+/* ===================== NAVEGAÇÃO ===================== */
+function buildNav(){
+  const secs=document.querySelectorAll('#content section.theme');
+  const map={'1':'nav1','2':'nav2','3':'nav3'};
+  secs.forEach(s=>{
+    const id=s.id, num=id.replace('t',''), title=s.dataset.title, g=s.dataset.group;
+    const host=document.getElementById(map[g]||'nav1');
+    const a=document.createElement('div');
+    a.className='navlink'; a.dataset.target=id;
+    a.innerHTML='<span class="nidx">'+num+'</span><span>'+title+'</span>';
+    a.addEventListener('click',()=>go(id));
+    host.appendChild(a);
+  });
+}
+function go(id){
+  document.querySelectorAll('#content section.theme').forEach(s=>s.classList.toggle('active',s.id===id));
+  document.querySelectorAll('.navlink').forEach(n=>n.classList.toggle('active',n.dataset.target===id));
+  try{const c=document.getElementById('content'); if(c&&c.scrollIntoView) c.scrollIntoView({block:'start'}); if(window.scrollTo) window.scrollTo({top:0});}catch(e){}
+  const sb=document.getElementById('sidebar'); if(sb) sb.classList.remove('open');
+  // redraw the active widget(s) in case it needs a fresh paint
+  if(window._redraw && window._redraw[id]) try{window._redraw[id]();}catch(e){}
+}
+function tog(btn){
+  const sol=btn.nextElementSibling;
+  const open=sol.classList.toggle('open');
+  btn.textContent=open?'esconder resolução':'ver resolução';
+}
+function toggleNav(){ document.getElementById('sidebar').classList.toggle('open'); }
+
+/* ===================== HELPERS DE PLOT ===================== */
+const COL={accent:'#1F5C8B',teal:'#0E7C66',amber:'#B5730A',rose:'#A8324A',ink:'#191A23',grid:'#EFECE3',axis:'#B7B2A4',grey:'#9AA3AD'};
+function P(cv,xmin,xmax,ymin,ymax,pad){
+  pad=pad==null?36:pad;
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const X=x=>pad+(x-xmin)/(xmax-xmin)*(W-2*pad);
+  const Y=y=>H-pad-(y-ymin)/(ymax-ymin)*(H-2*pad);
+  return {ctx,W,H,pad,xmin,xmax,ymin,ymax,X,Y};
+}
+function clearC(p){p.ctx.clearRect(0,0,p.W,p.H);p.ctx.fillStyle='#fff';p.ctx.fillRect(0,0,p.W,p.H);}
+function grid(p,stepx,stepy){
+  const c=p.ctx;c.save();c.strokeStyle=COL.grid;c.lineWidth=1;
+  if(stepx)for(let x=Math.ceil(p.xmin/stepx)*stepx;x<=p.xmax;x+=stepx){c.beginPath();c.moveTo(p.X(x),p.Y(p.ymin));c.lineTo(p.X(x),p.Y(p.ymax));c.stroke();}
+  if(stepy)for(let y=Math.ceil(p.ymin/stepy)*stepy;y<=p.ymax;y+=stepy){c.beginPath();c.moveTo(p.X(p.xmin),p.Y(y));c.lineTo(p.X(p.xmax),p.Y(y));c.stroke();}
+  c.restore();
+}
+function axes(p){
+  const c=p.ctx;c.save();c.strokeStyle=COL.axis;c.lineWidth=1.3;c.fillStyle=COL.grey;c.font='11px "JetBrains Mono",monospace';
+  if(p.ymin<=0&&p.ymax>=0){const y0=p.Y(0);c.beginPath();c.moveTo(p.X(p.xmin),y0);c.lineTo(p.X(p.xmax),y0);c.stroke();}
+  if(p.xmin<=0&&p.xmax>=0){const x0=p.X(0);c.beginPath();c.moveTo(x0,p.Y(p.ymin));c.lineTo(x0,p.Y(p.ymax));c.stroke();}
+  c.restore();
+}
+function plotf(p,f,color,w,dash){
+  const c=p.ctx;c.save();c.strokeStyle=color;c.lineWidth=w||2.2;c.lineJoin='round';if(dash)c.setLineDash(dash);
+  c.beginPath();let on=false;const N=480;
+  for(let i=0;i<=N;i++){const x=p.xmin+(p.xmax-p.xmin)*i/N;let y;try{y=f(x);}catch(e){y=NaN;}
+    if(!isFinite(y)||y<p.ymin-60||y>p.ymax+60){on=false;continue;}
+    const px=p.X(x),py=p.Y(y);
+    if(!on){c.moveTo(px,py);on=true;}else c.lineTo(px,py);}
+  c.stroke();c.restore();
+}
+function dot(p,x,y,color,r){const c=p.ctx;c.save();c.fillStyle=color;c.beginPath();c.arc(p.X(x),p.Y(y),r||4.5,0,7);c.fill();c.restore();}
+function vline(p,x,color,dash){const c=p.ctx;c.save();c.strokeStyle=color;c.lineWidth=1.6;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(p.X(x),p.Y(p.ymin));c.lineTo(p.X(x),p.Y(p.ymax));c.stroke();c.restore();}
+function hline(p,y,color,dash){const c=p.ctx;c.save();c.strokeStyle=color;c.lineWidth=1.6;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(p.X(p.xmin),p.Y(y));c.lineTo(p.X(p.xmax),p.Y(y));c.stroke();c.restore();}
+function rnd(x,d){d=d==null?2:d;const m=Math.pow(10,d);return Math.round(x*m)/m;}
+function ptr(cv,ev){const r=cv.getBoundingClientRect();const sx=cv.width/r.width,sy=cv.height/r.height;
+  const e=ev.touches?ev.touches[0]:ev;return {x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};}
+window._redraw={};
+
+/* ===================== WIDGETS ===================== */
+function W(id,fn){const cv=document.getElementById(id);if(!cv)return null;try{fn(cv);}catch(e){console.warn(id,e);}return cv;}
+
+/* t1 — Sucessões */
+W('cv-seq',function(cv){
+  const tEl=g('seq-type'),u1E=g('seq-u1'),rE=g('seq-r');
+  function draw(){
+    const type=tEl.value,u1=+u1E.value,r=+rE.value;
+    g('seq-u1l').textContent=u1; g('seq-rl').textContent=r;
+    g('seq-rname').textContent=type==='pa'?'razão r (+)':'razão r (×)';
+    const n=10,terms=[];
+    for(let k=1;k<=n;k++)terms.push(type==='pa'?u1+(k-1)*r:u1*Math.pow(r,k-1));
+    let lo=Math.min(0,...terms.filter(isFinite)),hi=Math.max(0,...terms.filter(isFinite));
+    if(hi-lo>400||!isFinite(hi-lo)){lo=-40;hi=40;}
+    const m=(hi-lo)*0.15||1;lo-=m;hi+=m;
+    const p=P(cv,0.4,n+0.6,lo,hi);clearC(p);grid(p,1,null);axes(p);
+    const c=p.ctx;
+    for(let k=1;k<=n;k++){let v=terms[k-1];if(!isFinite(v))continue;v=Math.max(lo,Math.min(hi,v));
+      c.strokeStyle='#D6DEE6';c.lineWidth=1;c.beginPath();c.moveTo(p.X(k),p.Y(0));c.lineTo(p.X(k),p.Y(v));c.stroke();
+      dot(p,k,v,COL.accent,4.5);}
+    g('seq-out').innerHTML='<span>'+(type==='pa'?'P. Aritmética':'P. Geométrica')+'</span> · u₁…u₅ = '+terms.slice(0,5).map(t=>rnd(t)).join(',  ')+' …';
+  }
+  [tEl,u1E,rE].forEach(e=>e.addEventListener('input',draw));draw();window._redraw['t1']=draw;
+});
+
+/* t2 — Limites de sucessões  u_n=(a n+b)/(c n+1) */
+W('cv-lim',function(cv){
+  const aE=g('lim-a'),bE=g('lim-b'),cE=g('lim-c');
+  function draw(){
+    const a=+aE.value,b=+bE.value,cc=+cE.value;
+    g('lim-al').textContent=a;g('lim-bl').textContent=b;g('lim-cl').textContent=cc;
+    const f=n=>(a*n+b)/(cc*n+1),L=a/cc,n=14;
+    const vals=[];for(let k=1;k<=n;k++)vals.push(f(k));
+    let lo=Math.min(L,...vals),hi=Math.max(L,...vals);const m=(hi-lo)*0.2||1;lo-=m;hi+=m;
+    const p=P(cv,0.4,n+0.6,lo,hi);clearC(p);grid(p,1,null);axes(p);
+    hline(p,L,COL.rose,[6,5]);
+    for(let k=1;k<=n;k++)dot(p,k,vals[k-1],COL.accent,4);
+    g('lim-out').innerHTML='limite = a/c = '+a+'/'+cc+' = <span>'+rnd(L,3)+'</span>  ·  u₁₄ ≈ '+rnd(vals[n-1],3);
+  }
+  [aE,bE,cE].forEach(e=>e.addEventListener('input',draw));draw();window._redraw['t2']=draw;
+});
+
+/* t3 — Continuidade: ramos com salto j em x=1 */
+W('cv-cont',function(cv){
+  const jE=g('cont-j');
+  function draw(){
+    const j=+jE.value;g('cont-jl').textContent=j;
+    const p=P(cv,-2,4,-3,5);clearC(p);grid(p,1,1);axes(p);
+    const left=x=>0.8*x, right=x=>0.8*x+j;
+    plotf(p,x=>x<1?left(x):NaN,COL.accent,2.4);
+    plotf(p,x=>x>=1?right(x):NaN,COL.accent,2.4);
+    // open dot (left limit) and closed dot (value)
+    const c=p.ctx;const yl=left(1),yr=right(1);
+    c.save();c.strokeStyle=COL.accent;c.fillStyle='#fff';c.lineWidth=2;c.beginPath();c.arc(p.X(1),p.Y(yl),4.5,0,7);c.fill();c.stroke();c.restore();
+    dot(p,1,yr,COL.rose,5);
+    g('cont-out').innerHTML='lim x→1⁻ = <span>'+rnd(yl)+'</span> · lim x→1⁺ = <span>'+rnd(yr)+'</span> · '+(Math.abs(j)<1e-9?'contínua ✓':'descontínua (salto '+rnd(j)+')');
+  }
+  jE.addEventListener('input',draw);draw();window._redraw['t3']=draw;
+});
+
+/* t4 — Derivada: secante→tangente em x^2 */
+W('cv-der',function(cv){
+  const aE=g('der-a'),hE=g('der-h');
+  function draw(){
+    const a=+aE.value,h=+hE.value;g('der-al').textContent=a;g('der-hl').textContent=h;
+    const f=x=>x*x;const p=P(cv,-3,3,-1,9);clearC(p);grid(p,1,1);axes(p);
+    plotf(p,f,COL.ink,2.2);
+    // tangent slope 2a
+    const mt=2*a, tan=x=>f(a)+mt*(x-a);
+    plotf(p,tan,COL.accent,2);
+    // secant slope (f(a+h)-f(a))/h = 2a+h
+    const ms=2*a+h, sec=x=>f(a)+ms*(x-a);
+    plotf(p,sec,COL.rose,2);
+    dot(p,a,f(a),COL.ink,5);dot(p,a+h,f(a+h),COL.rose,5);
+    g('der-out').innerHTML='declive secante = 2a+h = <span>'+rnd(ms)+'</span> → derivada f′(a)=2a = <span>'+rnd(mt)+'</span>';
+  }
+  [aE,hE].forEach(e=>e.addEventListener('input',draw));draw();window._redraw['t4']=draw;
+});
+
+/* t5 — Monotonia: f=x^3+bx, f'=3x^2+b */
+W('cv-mono',function(cv){
+  const bE=g('mono-b');
+  function draw(){
+    const b=+bE.value;g('mono-bl').textContent=b;
+    const f=x=>x*x*x+b*x, df=x=>3*x*x+b;
+    const p=P(cv,-3,3,-12,12);clearC(p);grid(p,1,3);axes(p);
+    plotf(p,f,COL.accent,2.4);
+    plotf(p,df,COL.amber,2,[6,5]);
+    let info='f′>0 sempre → f cresce';
+    if(b<0){const x0=Math.sqrt(-b/3);info='extremos em x = ±'+rnd(x0)+' (f′=0)';dot(p,x0,f(x0),COL.rose,4.5);dot(p,-x0,f(-x0),COL.rose,4.5);}
+    g('mono-out').innerHTML='<span>f(x)=x³+('+b+')x</span> · f′(x)=3x²+('+b+') · '+info;
+  }
+  bE.addEventListener('input',draw);draw();window._redraw['t5']=draw;
+});
+
+/* t6 — Círculo trigonométrico */
+W('cv-trig',function(cv){
+  const dE=g('trig-d');
+  function draw(){
+    let d=+dE.value;g('trig-dl').textContent=d;
+    const th=d*Math.PI/180;
+    const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=W/2-40;
+    ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+    // axes
+    ctx.strokeStyle=COL.grid;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(20,cy);ctx.lineTo(W-20,cy);ctx.moveTo(cx,20);ctx.lineTo(cx,H-20);ctx.stroke();
+    // circle
+    ctx.strokeStyle=COL.axis;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+    const px=cx+R*Math.cos(th),py=cy-R*Math.sin(th);
+    // projections
+    ctx.strokeStyle=COL.rose;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px,cy);ctx.stroke();// sin (vertical)
+    ctx.strokeStyle=COL.teal;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(cx,py);ctx.stroke();// cos (horizontal)
+    // cos segment on x-axis
+    ctx.strokeStyle=COL.teal;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,cy);ctx.stroke();
+    ctx.strokeStyle=COL.rose;ctx.beginPath();ctx.moveTo(px,cy);ctx.lineTo(px,py);ctx.stroke();
+    // radius
+    ctx.strokeStyle=COL.accent;ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,py);ctx.stroke();
+    ctx.fillStyle=COL.accent;ctx.beginPath();ctx.arc(px,py,5,0,7);ctx.fill();
+    // angle arc
+    ctx.strokeStyle=COL.amber;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,26,0,-th,th>0);ctx.stroke();
+    g('trig-out').innerHTML='θ = '+d+'° · cos θ = <span>'+rnd(Math.cos(th),3)+'</span> · sin θ = <span>'+rnd(Math.sin(th),3)+'</span> · tan θ = '+(Math.abs(Math.cos(th))<1e-3?'∄':rnd(Math.tan(th),3));
+  }
+  function drag(ev){const r=cv.getBoundingClientRect();if(!r.width)return;const q=ptr(cv,ev);
+    const ang=Math.atan2(cv.height/2-q.y,q.x-cv.width/2);let d=Math.round(ang*180/Math.PI);if(d<0)d+=360;dE.value=d;draw();ev.preventDefault();}
+  let dragging=false;
+  cv.addEventListener('mousedown',e=>{dragging=true;drag(e);});
+  window.addEventListener('mousemove',e=>{if(dragging)drag(e);});
+  window.addEventListener('mouseup',()=>dragging=false);
+  cv.addEventListener('touchstart',e=>{dragging=true;drag(e);},{passive:false});
+  cv.addEventListener('touchmove',e=>{if(dragging)drag(e);},{passive:false});
+  cv.addEventListener('touchend',()=>dragging=false);
+  dE.addEventListener('input',draw);draw();window._redraw['t6']=draw;
+});
+
+/* t7 — Triângulo de Pascal */
+W('cv-pascal',function(cv){
+  const nE=g('pas-n');
+  function draw(){
+    const N=+nE.value;g('pas-nl').textContent=N;
+    const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+    const rows=[];for(let n=0;n<=N;n++){const r=[];let v=1;for(let p=0;p<=n;p++){r.push(v);v=v*(n-p)/(p+1);}rows.push(r);}
+    const dy=(H-30)/(N+1),top=20;
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='13px "JetBrains Mono",monospace';
+    for(let n=0;n<=N;n++){const r=rows[n],y=top+n*dy,dx=Math.min(46,(W-60)/(N+1));
+      const x0=W/2-(n*dx)/2;
+      for(let p=0;p<=n;p++){const x=x0+p*dx;
+        ctx.fillStyle=(p===0||p===n)?COL.amber:COL.accent;
+        ctx.fillText(Math.round(r[p]),x,y);}
+    }
+    g('pas-out').innerHTML='linha '+N+': <span>'+rows[N].map(v=>Math.round(v)).join('  ')+'</span> · soma = 2^'+N+' = '+Math.pow(2,N);
+  }
+  nE.addEventListener('input',draw);draw();window._redraw['t7']=draw;
+});
+
+/* t8 — Curva normal */
+W('cv-normal',function(cv){
+  const mE=g('nm-m'),sE=g('nm-s'),kE=g('nm-k');
+  function draw(){
+    const mu=+mE.value,sg=+sE.value,k=+kE.value;
+    g('nm-ml').textContent=mu;g('nm-sl').textContent=sg;g('nm-kl').textContent=k;
+    const f=x=>Math.exp(-((x-mu)*(x-mu))/(2*sg*sg))/(sg*Math.sqrt(2*Math.PI));
+    const p=P(cv,-7,7,0,0.85);clearC(p);grid(p,1,null);axes(p);
+    // shaded band mu±k sigma
+    const c=p.ctx;c.save();c.fillStyle='rgba(31,92,139,0.16)';c.beginPath();
+    const x1=mu-k*sg,x2=mu+k*sg;c.moveTo(p.X(x1),p.Y(0));
+    for(let x=x1;x<=x2;x+=0.05)c.lineTo(p.X(x),p.Y(f(x)));
+    c.lineTo(p.X(x2),p.Y(0));c.closePath();c.fill();c.restore();
+    plotf(p,f,COL.accent,2.4);
+    vline(p,mu,COL.rose,[5,4]);
+    const pct={1:'68%',2:'95%',3:'99,7%'}[k];
+    g('nm-out').innerHTML='N(μ='+mu+', σ='+sg+') · faixa μ ± '+k+'σ = ['+rnd(x1)+', '+rnd(x2)+'] ≈ <span>'+pct+'</span>';
+  }
+  [mE,sE,kE].forEach(e=>e.addEventListener('input',draw));draw();window._redraw['t8']=draw;
+});
+
+/* t9 — Assíntotas: f=(x^2+1)/(x-a) */
+W('cv-asym',function(cv){
+  const aE=g('as-a');
+  function draw(){
+    const a=+aE.value;g('as-al').textContent=a;
+    const f=x=>(x*x+1)/(x-a);
+    const p=P(cv,-6,6,-12,12);clearC(p);grid(p,2,3);axes(p);
+    vline(p,a,COL.rose,[5,4]);
+    plotf(p,x=>x+a,COL.teal,1.8,[6,5]); // oblíqua y=x+a
+    plotf(p,f,COL.accent,2.4);
+    g('as-out').innerHTML='assíntota vertical: x = <span>'+a+'</span> · oblíqua: y = x + '+a;
+  }
+  aE.addEventListener('input',draw);draw();window._redraw['t9']=draw;
+});
+
+/* t10 — Concavidade: f=x^3+c x^2, f''=6x+2c */
+W('cv-conc',function(cv){
+  const cE=g('cc-c');
+  function draw(){
+    const cc=+cE.value;g('cc-cl').textContent=cc;
+    const f=x=>x*x*x+cc*x*x, d2=x=>6*x+2*cc;
+    const p=P(cv,-4,4,-15,15);clearC(p);grid(p,1,5);axes(p);
+    plotf(p,f,COL.accent,2.4);
+    plotf(p,d2,COL.amber,2,[6,5]);
+    const xi=-cc/3;dot(p,xi,f(xi),COL.rose,5);vline(p,xi,COL.rose,[3,4]);
+    g('cc-out').innerHTML='<span>f(x)=x³+('+cc+')x²</span> · f″=6x+'+(2*cc)+' · inflexão em x = <span>'+rnd(xi,3)+'</span>';
+  }
+  cE.addEventListener('input',draw);draw();window._redraw['t10']=draw;
+});
+
+/* t11 — Exponencial e logaritmo */
+W('cv-explog',function(cv){
+  const aE=g('el-a');
+  function draw(){
+    const a=+aE.value;g('el-al').textContent=a;
+    const p=P(cv,-3,5,-3,5);clearC(p);grid(p,1,1);axes(p);
+    plotf(p,x=>x,COL.grey,1.4,[5,5]); // y=x
+    plotf(p,x=>Math.pow(a,x),COL.accent,2.4); // a^x
+    plotf(p,x=>x>0?Math.log(x)/Math.log(a):NaN,COL.teal,2.4); // log_a x
+    g('el-out').innerHTML='base a = <span>'+a+'</span> · y = a^x (azul) e y = log_a x (verde) — inversas em y = x';
+  }
+  aE.addEventListener('input',draw);draw();window._redraw['t11']=draw;
+});
+
+/* t12 — Plano de Argand */
+W('cv-argand',function(cv){
+  const rE=g('ar-r'),tE=g('ar-t');
+  function draw(){
+    const rho=+rE.value;let deg=+tE.value;const th=deg*Math.PI/180;
+    g('ar-rl').textContent=rho;g('ar-tl').textContent=deg;
+    const a=rho*Math.cos(th),b=rho*Math.sin(th);
+    const p=P(cv,-3.4,3.4,-2,2);clearC(p);grid(p,1,1);axes(p);
+    const c=p.ctx;
+    // conjugate
+    c.save();c.strokeStyle=COL.grey;c.lineWidth=1.4;c.setLineDash([4,4]);c.beginPath();c.moveTo(p.X(0),p.Y(0));c.lineTo(p.X(a),p.Y(-b));c.stroke();c.restore();
+    dot(p,a,-b,COL.grey,4);
+    // angle arc
+    c.save();c.strokeStyle=COL.amber;c.lineWidth=2;c.beginPath();c.arc(p.X(0),p.Y(0),22,0,-th,th>0);c.stroke();c.restore();
+    // vector z
+    c.save();c.strokeStyle=COL.accent;c.lineWidth=2.4;c.beginPath();c.moveTo(p.X(0),p.Y(0));c.lineTo(p.X(a),p.Y(b));c.stroke();c.restore();
+    dot(p,a,b,COL.accent,5.5);
+    g('ar-out').innerHTML='z = '+rnd(a)+(b>=0?' + ':' − ')+Math.abs(rnd(b))+'i = <span>'+rho+' cis '+deg+'°</span> · z̄ a cinzento';
+  }
+  function drag(ev){const r=cv.getBoundingClientRect();if(!r.width)return;const q=ptr(cv,ev);
+    const X=x=>36+(x+3.4)/6.8*(cv.width-72);const Y=y=>cv.height-36-(y+2)/4*(cv.height-72);
+    // invert: solve x,y from pixel
+    const px=q.x,py=q.y;const x=(px-36)/(cv.width-72)*6.8-3.4;const y=(cv.height-36-py)/(cv.height-72)*4-2;
+    let rho=Math.min(3,Math.max(0.5,Math.hypot(x,y)));let ang=Math.atan2(y,x)*180/Math.PI;if(ang<0)ang+=360;
+    rE.value=rnd(rho,1);tE.value=Math.round(ang/5)*5;draw();ev.preventDefault();}
+  let dragging=false;
+  cv.addEventListener('mousedown',e=>{dragging=true;drag(e);});
+  window.addEventListener('mousemove',e=>{if(dragging)drag(e);});
+  window.addEventListener('mouseup',()=>dragging=false);
+  cv.addEventListener('touchstart',e=>{dragging=true;drag(e);},{passive:false});
+  cv.addEventListener('touchmove',e=>{if(dragging)drag(e);},{passive:false});
+  cv.addEventListener('touchend',()=>dragging=false);
+  [rE,tE].forEach(e=>e.addEventListener('input',draw));draw();window._redraw['t12']=draw;
+});
+
+/* t13 — Produto escalar */
+W('cv-dot',function(cv){
+  const aE=g('dt-a'),mE=g('dt-m');
+  const uLen=2.5; // u fixo no eixo x
+  function draw(){
+    let deg=+aE.value;const m=+mE.value;const th=deg*Math.PI/180;
+    g('dt-al').textContent=deg;g('dt-ml').textContent=m;
+    const ux=uLen,uy=0,vx=m*Math.cos(th),vy=m*Math.sin(th);
+    const dotp=ux*vx+uy*vy;
+    const p=P(cv,-3.6,3.6,-2.4,2.4);clearC(p);grid(p,1,1);axes(p);
+    const c=p.ctx;
+    function arrow(x,y,col){c.save();c.strokeStyle=col;c.fillStyle=col;c.lineWidth=2.6;
+      c.beginPath();c.moveTo(p.X(0),p.Y(0));c.lineTo(p.X(x),p.Y(y));c.stroke();
+      const ang=Math.atan2(-(p.Y(y)-p.Y(0)),p.X(x)-p.X(0));const hl=9;
+      c.beginPath();c.moveTo(p.X(x),p.Y(y));
+      c.lineTo(p.X(x)-hl*Math.cos(ang-0.4),p.Y(y)+hl*Math.sin(ang-0.4));
+      c.lineTo(p.X(x)-hl*Math.cos(ang+0.4),p.Y(y)+hl*Math.sin(ang+0.4));
+      c.closePath();c.fill();c.restore();}
+    // angle arc
+    c.save();c.strokeStyle=COL.amber;c.lineWidth=2;c.beginPath();c.arc(p.X(0),p.Y(0),24,0,-th,th>0);c.stroke();c.restore();
+    arrow(ux,uy,COL.teal);arrow(vx,vy,COL.accent);
+    const perp=Math.abs(dotp)<0.06;
+    g('dt-out').innerHTML='u·v = <span>'+rnd(dotp)+'</span>'+(perp?' → perpendiculares (u·v=0) ✓':'')+' · ângulo = '+deg+'°';
+  }
+  function drag(ev){const r=cv.getBoundingClientRect();if(!r.width)return;const q=ptr(cv,ev);
+    const x=(q.x-36)/(cv.width-72)*7.2-3.6;const y=(cv.height-36-q.y)/(cv.height-72)*4.8-2.4;
+    let ang=Math.atan2(y,x)*180/Math.PI;if(ang<0)ang+=360;let m=Math.min(3.5,Math.max(1,Math.hypot(x,y)));
+    aE.value=Math.round(ang/5)*5;mE.value=rnd(m,1);draw();ev.preventDefault();}
+  let dragging=false;
+  cv.addEventListener('mousedown',e=>{dragging=true;drag(e);});
+  window.addEventListener('mousemove',e=>{if(dragging)drag(e);});
+  window.addEventListener('mouseup',()=>dragging=false);
+  cv.addEventListener('touchstart',e=>{dragging=true;drag(e);},{passive:false});
+  cv.addEventListener('touchmove',e=>{if(dragging)drag(e);},{passive:false});
+  cv.addEventListener('touchend',()=>dragging=false);
+  [aE,mE].forEach(e=>e.addEventListener('input',draw));draw();window._redraw['t13']=draw;
+});
+
+/* t14 — Estatística (barras + média + desvio padrão) */
+W('cv-stat',function(cv){
+  const vE=g('st-v');
+  const base=[4,6,5,7,8];
+  function draw(){
+    const last=+vE.value;g('st-vl').textContent=last;
+    const data=base.concat([last]);
+    const n=data.length,mean=data.reduce((a,b)=>a+b,0)/n;
+    const varc=data.reduce((a,b)=>a+(b-mean)*(b-mean),0)/n,sd=Math.sqrt(varc);
+    const p=P(cv,-0.4,n-0.6,0,16);clearC(p);grid(p,null,2);axes(p);
+    const c=p.ctx,bw=(p.X(1)-p.X(0))*0.6;
+    data.forEach((v,i)=>{const x=p.X(i),y0=p.Y(0),y1=p.Y(v);
+      c.fillStyle=(i===n-1)?COL.amber:COL.accent;c.fillRect(x-bw/2,y1,bw,y0-y1);
+      c.fillStyle=COL.ink;c.font='12px "JetBrains Mono",monospace';c.textAlign='center';c.fillText(v,x,y1-7);});
+    hline(p,mean,COL.rose,[6,5]);
+    g('st-out').innerHTML='dados: ['+data.join(', ')+'] · média = <span>'+rnd(mean,2)+'</span> · σ = <span>'+rnd(sd,2)+'</span>';
+  }
+  vE.addEventListener('input',draw);draw();window._redraw['t14']=draw;
+});
+
+function g(id){return document.getElementById(id);}
+
+/* ===================== ARRANQUE ===================== */
+function start(){
+  buildNav();
+  // ativa o primeiro tema
+  const first=document.querySelector('#content section.theme');
+  if(first){first.classList.add('active');const nl=document.querySelector('.navlink[data-target="'+first.id+'"]');if(nl)nl.classList.add('active');}
+  // KaTeX
+  if(window.renderMathInElement){
+    renderMathInElement(document.body,{delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false},
+      {left:'\\[',right:'\\]',display:true}
+    ],throwOnError:false});
+  }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+</script>
+</body>
+</html>
